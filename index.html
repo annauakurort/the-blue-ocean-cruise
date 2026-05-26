@@ -472,7 +472,8 @@
 <body>
 
 <section class="hero">
-  <video class="hero-video" autoplay muted defaultMuted loop playsinline webkit-playsinline preload="auto" poster="assets/image-01.jpg">
+  <video class="hero-video" autoplay muted defaultMuted loop playsinline webkit-playsinline preload="metadata" poster="assets/image-01.jpg">
+    <source src="assets/hero-video.mp4" type="video/mp4">
     <source src="assets/hero-video-safari.mp4" type="video/mp4">
   </video>
   <div class="hero-logo">The <em>Blue</em> Ocean</div>
@@ -797,25 +798,22 @@
   if (heroVideo) {
     heroVideo.muted = true;
     heroVideo.defaultMuted = true;
-    heroVideo.setAttribute('muted', '');
-    heroVideo.setAttribute('defaultMuted', '');
-    heroVideo.setAttribute('playsinline', '');
-    heroVideo.setAttribute('webkit-playsinline', '');
-    heroVideo.load();
 
-    const startHeroVideo = () => {
-      const attempt = heroVideo.play();
-      if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+    const tryPlay = () => {
+      const p = heroVideo.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
     };
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', startHeroVideo, { once: true });
-    } else {
-      startHeroVideo();
-    }
-    window.addEventListener('pageshow', startHeroVideo);
+    // Чекаємо поки відео готове — тільки тоді play()
+    // Це вирішує race condition на мобільних при повільному інтернеті
+    heroVideo.addEventListener('canplay', tryPlay, { once: true });
+
+    // Якщо відео вже завантажене (кеш) — грати одразу
+    if (heroVideo.readyState >= 3) tryPlay();
+
+    window.addEventListener('pageshow', tryPlay);
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) startHeroVideo();
+      if (!document.hidden) tryPlay();
     });
   }
 
