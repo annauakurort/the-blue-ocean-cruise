@@ -36,6 +36,9 @@
     .hero { position: relative; height: 100vh; overflow: hidden; }
     .hero-img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; display: block; filter: brightness(0.72); }
     .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(0.72); background: var(--black); }
+    /* Ховаємо нативну кнопку play на iOS Safari */
+    .hero-video::-webkit-media-controls { display: none !important; }
+    .hero-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
     .hero::after {
       content: "";
       position: absolute;
@@ -800,21 +803,26 @@
     heroVideo.defaultMuted = true;
 
     const tryPlay = () => {
-      if (heroVideo.paused) {
-        const p = heroVideo.play();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
-      }
+      if (!heroVideo.paused) return;
+      const p = heroVideo.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
     };
 
-    // loadedmetadata — спрацьовує на iOS навіть з preload="metadata"
-    // canplay — спрацьовує на десктопних браузерах
-    // Обидва потрібні: iOS не буферизує відео до loadedmetadata,
-    // тому canplay там не спрацьовує взагалі
+    // Слухаємо всі можливі події готовності відео
     heroVideo.addEventListener('loadedmetadata', tryPlay, { once: true });
-    heroVideo.addEventListener('canplay', tryPlay, { once: true });
+    heroVideo.addEventListener('loadeddata',     tryPlay, { once: true });
+    heroVideo.addEventListener('canplay',        tryPlay, { once: true });
 
-    // Якщо відео вже завантажене (кеш браузера)
+    // Якщо вже завантажено (кеш)
     if (heroVideo.readyState >= 1) tryPlay();
+
+    // iOS fallback: autoplay іноді стартує з затримкою
+    // setTimeout дає iOS час почати завантаження відео
+    setTimeout(tryPlay, 200);
+    setTimeout(tryPlay, 800);
+
+    // Якщо iOS повністю заблокував autoplay — програємо на першому дотику
+    document.addEventListener('touchstart', tryPlay, { once: true });
 
     window.addEventListener('pageshow', tryPlay);
     document.addEventListener('visibilitychange', () => {
