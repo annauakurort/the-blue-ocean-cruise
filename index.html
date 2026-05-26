@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Blue Ocean — Explora Journeys</title>
+  <meta name="description" content="Круїзи Explora Journeys: Середземне море, Кариби, Атлантика та інші маршрути. Приватний підбір для українських гостей.">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #060e1c;
+      --dark:   #09142a;
+      --cream:  #f2ede4;
+      --gold:   #c4a35a;
+      --gold2:  #d4b870;
+      --muted:  rgba(242,237,228,0.45);
+      --faint:  rgba(196,163,90,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-slow { opacity: 0; transition: opacity 1.6s ease; }
+    .reveal-slow.visible { opacity: 1; }
+
+    .hero { position: relative; height: 100vh; overflow: hidden; }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; display: block; filter: brightness(0.72); }
+    .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(0.72); background: var(--black); }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(6,14,28,0.25) 0%, rgba(6,14,28,0.1) 45%, rgba(6,14,28,0.8) 100%),
+        radial-gradient(circle at 50% 70%, rgba(196,163,90,0.16), transparent 42%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .hero-logo {
+      position: absolute; top: 44px; left: 50%; transform: translateX(-50%);
+      font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 400;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--cream);
+      white-space: nowrap; z-index: 3;
+    }
+    .hero-logo em { font-style: normal; color: var(--gold); }
+    .hero-content {
+      position: absolute;
+      left: 50%;
+      bottom: 108px;
+      width: min(920px, calc(100% - 48px));
+      transform: translateX(-50%);
+      z-index: 3;
+      text-align: center;
+    }
+    .hero-kicker {
+      display: block;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(50px, 8vw, 108px);
+      font-weight: 300;
+      line-height: 0.98;
+      color: var(--cream);
+      margin-bottom: 28px;
+    }
+    .hero-title em { color: var(--gold); font-style: italic; }
+    .hero-copy {
+      max-width: 620px;
+      margin: 0 auto 36px;
+      color: rgba(242,237,228,0.76);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .cta-btn.secondary {
+      color: var(--cream);
+      background: rgba(6,14,28,0.42);
+      border: 1px solid rgba(242,237,228,0.28);
+      backdrop-filter: blur(10px);
+    }
+    .cta-btn.secondary:hover { background: rgba(242,237,228,0.12); }
+    .hero-scroll-hint {
+      position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 3;
+    }
+    .scroll-dot {
+      width: 1px; height: 56px;
+      background: linear-gradient(180deg, transparent, rgba(242,237,228,0.6));
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    .headline-section { padding: 160px 24px 140px; text-align: center; max-width: 900px; margin: 0 auto; }
+    .headline-label { font-size: 10px; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 52px; display: block; }
+    .headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(56px, 9vw, 120px); font-weight: 300; line-height: 1.05; letter-spacing: -0.01em; color: var(--cream); margin-bottom: 52px; }
+    .headline em { font-style: italic; color: var(--gold); }
+    .headline-sub { font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+
+    .trust-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--faint);
+      border-bottom: 1px solid var(--faint);
+      background: rgba(8,15,30,0.72);
+    }
+    .trust-item {
+      padding: 30px 28px;
+      text-align: center;
+      border-right: 1px solid var(--faint);
+    }
+    .trust-item:last-child { border-right: none; }
+    .trust-label {
+      display: block;
+      color: var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .trust-copy {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      line-height: 1.5;
+      text-transform: uppercase;
+    }
+
+    .sep { width: 1px; height: 80px; background: linear-gradient(180deg, transparent, rgba(196,163,90,0.4), transparent); margin: 0 auto; }
+
+    .lines-section { padding: 120px 24px; }
+    .line-block { text-align: center; padding: 60px 0; border-bottom: 1px solid var(--faint); max-width: 700px; margin: 0 auto; }
+    .line-block:first-child { border-top: 1px solid var(--faint); }
+    .line-num { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 300; color: var(--gold); opacity: 0.5; letter-spacing: 0.15em; margin-bottom: 24px; display: block; }
+    .line-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 4vw, 48px); font-weight: 300; line-height: 1.35; color: var(--cream); }
+    .line-text em { font-style: italic; color: var(--gold); }
+
+    .ship-section { position: relative; height: 80vh; overflow: hidden; }
+    .ship-img { width: 100%; height: 100%; object-fit: cover; object-position: center 55%; display: block; filter: brightness(0.65); transition: transform 12s ease; }
+    .ship-section:hover .ship-img { transform: scale(1.04); }
+    .ship-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .ship-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 7vw, 96px); font-weight: 300; letter-spacing: 0.04em; color: var(--cream); margin-bottom: 20px; }
+    .ship-name em { font-style: italic; color: var(--gold); }
+    .ship-sub { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(242,237,228,0.55); }
+
+    .facts-section { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--faint); border-bottom: 1px solid var(--faint); }
+    .fact { padding: 60px 40px; text-align: center; border-right: 1px solid var(--faint); }
+    .fact:last-child { border-right: none; }
+    .fact-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 7vw, 80px); font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 12px; }
+    .fact-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+
+    .included-section { padding: 140px 24px; background: #080f1e; }
+    .section-intro { text-align: center; max-width: 760px; margin: 0 auto 64px; }
+    .section-label { display: block; color: var(--gold); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 28px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(38px, 5vw, 72px); font-weight: 300; line-height: 1.1; margin-bottom: 24px; }
+    .section-copy { color: var(--muted); font-size: 14px; line-height: 1.9; }
+    .included-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; max-width: 980px; margin: 0 auto; background: var(--faint); border: 1px solid var(--faint); }
+    .included-item { background: #060e1c; padding: 34px 30px; min-height: 150px; }
+    .included-mark { display: block; width: 28px; height: 1px; background: var(--gold); margin-bottom: 24px; }
+    .included-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; margin-bottom: 12px; }
+    .included-copy { color: var(--muted); font-size: 13px; line-height: 1.7; }
+
+    .suite-section { display: grid; grid-template-columns: 1fr 1fr; height: 70vh; }
+    .suite-img-wrap { position: relative; overflow: hidden; }
+    .suite-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); transition: transform 10s ease; }
+    .suite-img-wrap:hover .suite-img { transform: scale(1.04); }
+    .suite-text { background: #080f1e; display: flex; flex-direction: column; justify-content: center; padding: 80px 72px; }
+    .suite-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 32px; }
+    .suite-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4vw, 58px); font-weight: 300; line-height: 1.2; margin-bottom: 32px; }
+    .suite-desc { font-size: 14px; line-height: 1.9; color: var(--muted); max-width: 360px; }
+
+    .cabins-section { padding: 140px 24px 150px; }
+    .cabins-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .cabin-card {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      overflow: hidden;
+      background: #080f1e;
+      border: 1px solid var(--faint);
+    }
+    .cabin-card.featured { grid-column: auto; }
+    .cabin-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      height: auto;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.62);
+      transition: transform 10s ease, filter 0.5s ease;
+    }
+    .cabin-card:hover .cabin-img { transform: scale(1.04); filter: brightness(0.72); }
+    .cabin-info {
+      display: flex;
+      flex-direction: column;
+      padding: 28px 24px 26px;
+      min-height: 292px;
+      background: #080f1e;
+    }
+    .cabin-type {
+      color: var(--gold);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      line-height: 1.5;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .cabin-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      line-height: 1.12;
+      margin-bottom: 12px;
+      min-height: 62px;
+    }
+    .cabin-copy {
+      color: rgba(242,237,228,0.62);
+      font-size: 12px;
+      line-height: 1.7;
+      min-height: 82px;
+    }
+    .cabin-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 16px;
+    }
+    .cabin-pill {
+      border: 1px solid rgba(196,163,90,0.28);
+      color: rgba(242,237,228,0.74);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      line-height: 1;
+      padding: 9px 10px;
+      text-transform: uppercase;
+      background: rgba(6,14,28,0.35);
+    }
+
+    .lifestyle-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); text-align: center; display: block; padding: 100px 0 64px; }
+    .lifestyle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 0 2px; padding-bottom: 2px; }
+    .lifestyle-item { position: relative; height: 520px; overflow: hidden; }
+    .lifestyle-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); transition: transform 10s ease, filter 0.6s; }
+    .lifestyle-item:hover .lifestyle-img { transform: scale(1.05); filter: brightness(0.78); }
+    .lifestyle-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 32px; background: linear-gradient(0deg, rgba(6,14,28,0.92) 0%, transparent 100%); }
+    .lifestyle-tag { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .lifestyle-name { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; color: var(--cream); }
+
+    .routes-section { padding: 0 0 160px; }
+    .routes-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); text-align: center; display: block; padding: 100px 0 64px; }
+    .routes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 0 2px; }
+    .route { position: relative; height: 480px; overflow: hidden; }
+    .route-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.55); transition: transform 10s ease, filter 0.6s; }
+    .route:hover .route-img { transform: scale(1.06); filter: brightness(0.65); }
+    .route-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px; background: linear-gradient(0deg, rgba(8,8,8,0.9) 0%, transparent 100%); }
+    .route-tag { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .route-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; margin-bottom: 6px; }
+    .route-ports { font-size: 11px; letter-spacing: 0.08em; color: var(--muted); line-height: 1.6; }
+
+    .concierge-section {
+      padding: 130px 24px;
+      text-align: center;
+      border-top: 1px solid var(--faint);
+      border-bottom: 1px solid var(--faint);
+    }
+    .concierge-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      max-width: 960px;
+      margin: 56px auto 60px;
+      background: var(--faint);
+      border: 1px solid var(--faint);
+      text-align: left;
+    }
+    .concierge-step { background: var(--black); padding: 34px 30px; }
+    .step-num { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 18px; display: block; }
+    .step-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; margin-bottom: 12px; }
+    .step-copy { color: var(--muted); font-size: 13px; line-height: 1.7; }
+
+    .price-section { padding: 160px 24px; text-align: center; }
+    .price-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 48px; display: block; }
+    .price-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(72px, 12vw, 160px); font-weight: 300; color: var(--cream); line-height: 1; }
+    .price-num sup { font-size: 0.4em; vertical-align: super; color: var(--gold); }
+    .price-unit { font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 20px; margin-bottom: 64px; }
+    .price-note { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 80px; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .cta-btn { display: inline-block; font-size: 11px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: var(--black); background: var(--gold); padding: 20px 56px; text-decoration: none; transition: background 0.3s, transform 0.2s; }
+    .cta-btn:hover { background: #d4b870; transform: translateY(-2px); }
+
+    .tg-float { position: fixed; bottom: 32px; right: 32px; z-index: 100; display: flex; align-items: center; gap: 0; text-decoration: none; filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5)); transition: transform 0.25s ease, filter 0.25s ease; }
+    .tg-float:hover { transform: translateY(-3px); filter: drop-shadow(0 8px 28px rgba(0,0,0,0.6)); }
+    .tg-float:hover .tg-label { max-width: 200px; opacity: 1; padding: 0 16px 0 14px; }
+    .tg-icon { width: 56px; height: 56px; border-radius: 50%; background: #229ED9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tg-icon svg { width: 26px; height: 26px; fill: #fff; }
+    .tg-label { height: 56px; border-radius: 0 28px 28px 0; margin-left: -28px; padding: 0; background: #229ED9; color: #fff; font-size: 12px; letter-spacing: 0.06em; display: flex; align-items: center; white-space: nowrap; max-width: 0; overflow: hidden; opacity: 0; transition: max-width 0.35s ease, opacity 0.25s ease, padding 0.35s ease; }
+
+    .mobile-cta {
+      position: fixed;
+      left: 14px;
+      right: 14px;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      z-index: 99;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      background: var(--gold);
+      color: var(--black);
+      text-decoration: none;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      box-shadow: 0 10px 34px rgba(0,0,0,0.35);
+    }
+
+    .final-section { padding: 160px 24px; text-align: center; border-top: 1px solid var(--faint); }
+    .final-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 6vw, 80px); font-weight: 300; line-height: 1.15; margin-bottom: 40px; }
+    .final-sub { font-size: 13px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 64px; }
+
+    footer { padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--faint); }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; }
+    .footer-logo em { font-style: normal; color: var(--gold); }
+    .footer-right { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+    /* TABLET LANDSCAPE */
+    @media (max-width: 1100px) {
+      .suite-text { padding: 60px 48px; }
+      .headline-section { padding: 140px 40px 120px; }
+    }
+
+    /* TABLET PORTRAIT */
+    @media (max-width: 900px) {
+      .facts-section { grid-template-columns: 1fr; }
+      .fact { border-right: none; border-bottom: 1px solid var(--faint); padding: 44px 32px; }
+      .fact:last-child { border-bottom: none; }
+      .trust-strip { grid-template-columns: repeat(2, 1fr); }
+      .trust-item:nth-child(2) { border-right: none; }
+      .trust-item:nth-child(-n+2) { border-bottom: 1px solid var(--faint); }
+      .included-grid { grid-template-columns: 1fr 1fr; }
+      .concierge-steps { grid-template-columns: 1fr; }
+      .cabins-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .cabin-card.featured { grid-column: span 1; }
+      .suite-section { grid-template-columns: 1fr; height: auto; }
+      .suite-img-wrap { height: 55vw; min-height: 300px; }
+      .suite-text { padding: 56px 40px; }
+      .suite-desc { max-width: 100%; }
+      .lifestyle-grid { grid-template-columns: 1fr; }
+      .lifestyle-item { height: 400px; }
+      .routes-grid { grid-template-columns: 1fr; }
+      .route { height: 380px; }
+      .ship-section { height: 60vh; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+      .tg-float { bottom: 24px; right: 24px; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .hero { height: 100vh; height: 100svh; min-height: 560px; }
+      .hero-logo { font-size: 12px; letter-spacing: 0.2em; top: 28px; }
+      .hero-content { bottom: 86px; width: min(100% - 32px, 440px); }
+      .hero-kicker { font-size: 9px; letter-spacing: 0.22em; margin-bottom: 18px; }
+      .hero-title { font-size: clamp(42px, 13vw, 68px); margin-bottom: 22px; }
+      .hero-copy { font-size: 13px; line-height: 1.7; margin-bottom: 26px; }
+      .hero-actions { gap: 10px; }
+
+      .headline-section { padding: 100px 20px 80px; }
+      .headline { font-size: clamp(44px, 13vw, 72px); margin-bottom: 36px; }
+      .headline-sub { font-size: 10px; letter-spacing: 0.12em; }
+      .headline-label { font-size: 9px; margin-bottom: 36px; }
+
+      .lines-section { padding: 72px 20px; }
+      .line-block { padding: 40px 0; }
+      .line-text { font-size: clamp(22px, 6vw, 36px); }
+
+      .ship-section { height: 50vh; }
+      .ship-name { font-size: clamp(36px, 10vw, 60px); }
+
+      .fact { padding: 36px 20px; }
+      .fact-num { font-size: clamp(44px, 10vw, 60px); }
+      .trust-strip { grid-template-columns: 1fr; }
+      .trust-item,
+      .trust-item:nth-child(2) { border-right: none; }
+      .trust-item { border-bottom: 1px solid var(--faint); padding: 26px 20px; }
+      .trust-item:last-child { border-bottom: none; }
+      .trust-label { font-size: 24px; }
+      .included-section { padding: 92px 20px; }
+      .section-intro { margin-bottom: 42px; }
+      .section-label { font-size: 9px; margin-bottom: 22px; }
+      .section-copy { font-size: 13px; }
+      .included-grid { grid-template-columns: 1fr; }
+      .included-item { padding: 28px 22px; min-height: auto; }
+      .included-title { font-size: 24px; }
+      .cabins-section { padding: 92px 20px 100px; }
+      .cabins-grid { grid-template-columns: 1fr; }
+      .cabin-img { aspect-ratio: 16 / 10; }
+      .cabin-info { min-height: auto; }
+      .cabin-info { padding: 24px 20px; }
+      .cabin-name { font-size: 26px; min-height: auto; }
+      .cabin-copy { min-height: auto; }
+
+      .suite-img-wrap { height: 60vw; min-height: 260px; }
+      .suite-text { padding: 44px 20px; }
+      .suite-headline { font-size: clamp(28px, 7vw, 44px); }
+      .suite-desc { font-size: 13px; }
+
+      .lifestyle-label { padding: 72px 0 44px; font-size: 9px; }
+      .lifestyle-item { height: 300px; }
+      .lifestyle-caption { padding: 20px; }
+      .lifestyle-name { font-size: 22px; }
+
+      .routes-section { padding: 0 0 100px; }
+      .routes-label { padding: 72px 0 44px; font-size: 9px; }
+      .route { height: 300px; }
+      .route-name { font-size: 22px; }
+      .route-info { padding: 20px; }
+      .concierge-section { padding: 92px 20px; }
+      .concierge-steps { margin: 40px auto 44px; }
+      .concierge-step { padding: 28px 22px; }
+
+      .price-section { padding: 100px 20px; }
+      .price-label { font-size: 9px; margin-bottom: 32px; }
+      .price-unit { font-size: 11px; margin-bottom: 48px; }
+      .price-note { font-size: 12px; margin-bottom: 56px; }
+      .cta-btn { padding: 18px 36px; font-size: 10px; letter-spacing: 0.2em; }
+
+      .final-section { padding: 100px 20px; }
+      .final-headline { font-size: clamp(32px, 9vw, 60px); }
+      .final-sub { font-size: 11px; }
+
+      footer { padding: 28px 20px; }
+      .footer-right { font-size: 10px; }
+
+      .tg-float { bottom: max(16px, env(safe-area-inset-bottom)); right: max(16px, env(safe-area-inset-right)); }
+      .tg-icon { width: 48px; height: 48px; }
+      .tg-icon svg { width: 22px; height: 22px; }
+      .tg-float { display: none; }
+      .mobile-cta { display: flex; }
+      body { padding-bottom: 76px; }
+    }
+
+    /* SMALL MOBILE */
+    @media (max-width: 380px) {
+      .headline { font-size: 38px; }
+      .ship-name { font-size: 32px; }
+      .suite-headline { font-size: 26px; }
+      .price-num { font-size: 72px; }
+      .lifestyle-item { height: 260px; }
+      .route { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <video class="hero-video" autoplay muted defaultMuted loop playsinline webkit-playsinline preload="auto" poster="assets/image-01.jpg">
+    <source src="assets/hero-video-safari.mp4" type="video/mp4">
+    <source src="assets/hero-video.mp4" type="video/mp4">
+  </video>
+  <div class="hero-logo">The <em>Blue</em> Ocean</div>
+  <div class="hero-content">
+    <span class="hero-kicker reveal-slow">Explora Journeys · приватний підбір круїзів</span>
+    <h1 class="hero-title reveal-slow">Круїз - де<br><em>море належить вам</em></h1>
+    <p class="hero-copy reveal-slow">Люксові подорожі Explora Journeys для гостей, які цінують тишу, сервіс і відчуття власного простору в океані.</p>
+    <div class="hero-actions reveal-slow">
+      <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn">Підібрати круїз</a>
+      <a href="#routes" class="cta-btn secondary">Переглянути напрямки</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint"><div class="scroll-dot"></div></div>
+</section>
+
+<div class="trust-strip">
+  <div class="trust-item reveal">
+    <span class="trust-label">MSC Group</span>
+    <div class="trust-copy">круїзна екосистема бренду</div>
+  </div>
+  <div class="trust-item reveal">
+    <span class="trust-label">All-inclusive</span>
+    <div class="trust-copy">без зайвих доплат</div>
+  </div>
+  <div class="trust-item reveal">
+    <span class="trust-label">9 ресторанів</span>
+    <div class="trust-copy">гастрономія щодня</div>
+  </div>
+  <div class="trust-item reveal">
+    <span class="trust-label">Тераса</span>
+    <div class="trust-copy">у кожному сьюті</div>
+  </div>
+</div>
+
+<section class="headline-section">
+  <span class="headline-label reveal">Explora Journeys · MSC Group · Україна</span>
+  <h2 class="headline reveal">Не просто круїз.<br><em>Ваш приватний ритм</em> у морі</h2>
+  <p class="headline-sub reveal">Середземне море · Кариби · Аляска · Азія · Антарктида</p>
+</section>
+
+<div class="sep reveal-slow"></div>
+
+<section class="lines-section">
+  <div class="line-block reveal">
+    <span class="line-num">I</span>
+    <p class="line-text">Ранок на терасі над морем.<br>Кава. І нікуди поспішати.</p>
+  </div>
+  <div class="line-block reveal">
+    <span class="line-num">II</span>
+    <p class="line-text">Щоранку - <em>інше місто</em></p>
+  </div>
+  <div class="line-block reveal">
+    <span class="line-num">III</span>
+    <p class="line-text">Усе, що потрібно,<br>вже на борту</p>
+  </div>
+</section>
+
+<section class="ship-section">
+  <img class="ship-img" src="assets/image-02.jpg" alt="Explora Journeys" loading="lazy" />
+  <div class="ship-overlay">
+    <h2 class="ship-name reveal"><em>Explora</em> Journeys</h2>
+    <p class="ship-sub reveal">MSC Group · Люкс у відкритому морі</p>
+  </div>
+</section>
+
+<div class="facts-section">
+  <div class="fact reveal">
+    <div class="fact-num">461</div>
+    <div class="fact-label">приватний сьют на кожному кораблі</div>
+  </div>
+  <div class="fact reveal">
+    <div class="fact-num">9</div>
+    <div class="fact-label">кулінарних просторів на борту</div>
+  </div>
+  <div class="fact reveal">
+    <div class="fact-num">740+</div>
+    <div class="fact-label">маршрутів у сезонах 2025–2026</div>
+  </div>
+</div>
+
+<section class="included-section">
+  <div class="section-intro reveal">
+    <span class="section-label">Що вже включено</span>
+    <h2 class="section-title">Більше сервісу.<br>Менше дрібних рішень</h2>
+    <p class="section-copy">Explora Journeys створені для подорожі без постійних доплат і зайвого планування. Ви обираєте напрямок, а ми підбираємо маршрут, дату, категорію сьюта й найкращі умови.</p>
+  </div>
+  <div class="included-grid">
+    <div class="included-item reveal">
+      <span class="included-mark"></span>
+      <h3 class="included-title">Шампанське та напої</h3>
+      <p class="included-copy">Преміальні напої, бари та щоденний сервіс без рахунку після кожного замовлення.</p>
+    </div>
+    <div class="included-item reveal">
+      <span class="included-mark"></span>
+      <h3 class="included-title">Wi-Fi та чайові</h3>
+      <p class="included-copy">Базові витрати, які часто відволікають у подорожі, вже враховані у вартості.</p>
+    </div>
+    <div class="included-item reveal">
+      <span class="included-mark"></span>
+      <h3 class="included-title">Спа та відновлення</h3>
+      <p class="included-copy">Океанський ритм, тиша, відновлення та простір для себе між портами.</p>
+    </div>
+    <div class="included-item reveal">
+      <span class="included-mark"></span>
+      <h3 class="included-title">Авторські ресторани</h3>
+      <p class="included-copy">Дев'ять гастрономічних просторів на борту, щоб кожен вечір мав інший настрій.</p>
+    </div>
+    <div class="included-item reveal">
+      <span class="included-mark"></span>
+      <h3 class="included-title">Приватний підбір</h3>
+      <p class="included-copy">Підберемо маршрут під ваш сезон, бюджет, склад гостей і бажаний темп подорожі.</p>
+    </div>
+    <div class="included-item reveal">
+      <span class="included-mark"></span>
+      <h3 class="included-title">Супровід 4 мовами</h3>
+      <p class="included-copy">Від першого питання до бронювання: українською, англійською, китайською та російською.</p>
+    </div>
+  </div>
+</section>
+
+<div class="suite-section">
+  <div class="suite-img-wrap">
+    <img class="suite-img" src="assets/serenity-residence-terrace.webp" alt="Приватна тераса Serenity Residence" loading="lazy" />
+  </div>
+  <div class="suite-text">
+    <div class="suite-label reveal">Ваш дім у морі</div>
+    <h3 class="suite-headline reveal">Приватна тераса.<br>Ваш горизонт</h3>
+    <p class="suite-desc reveal">Кожен сьют - це приватний простір над водою. Власна тераса, де ранок починається з горизонту. Підігрів підлоги, тиша, повільний час. Для категорій Penthouse і вище передбачений персональний дворецький: завжди поруч, але ніколи не навʼязливо.</p>
+  </div>
+</div>
+
+<section class="cabins-section">
+  <div class="section-intro reveal">
+    <span class="section-label">Сьюти EXPLORA I</span>
+    <h2 class="section-title">Від тераси над морем<br>до власної резиденції</h2>
+    <p class="section-copy">На борту EXPLORA I всі варіанти розміщення створені як Homes at Sea: з океанським видом, приватною терасою та відчуттям повноцінного простору, а не просто номера.</p>
+  </div>
+  <div class="cabins-grid">
+    <article class="cabin-card featured reveal">
+      <img class="cabin-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/OCEAN-TERRACE-SUITE-landscape?fit=constrain&amp;fmt=webp&amp;hei=550&amp;ts=1750059536118&amp;wid=1440" alt="Ocean Terrace Suite" loading="lazy" />
+      <div class="cabin-info">
+        <div class="cabin-type">Ocean Suites</div>
+        <h3 class="cabin-name">Ocean Terrace Suites</h3>
+        <p class="cabin-copy">Світлі сьюти з приватною сонячною терасою, daybed-зоною та близькістю до ритму океану.</p>
+        <div class="cabin-list">
+          <span class="cabin-pill">Ocean Terrace</span>
+          <span class="cabin-pill">Ocean Grand Terrace</span>
+        </div>
+      </div>
+    </article>
+    <article class="cabin-card reveal">
+      <img class="cabin-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/GRAND-PENTHOUSE-11-landscape?fit=constrain&amp;fmt=webp&amp;hei=550&amp;ts=1750059535014&amp;wid=1440" alt="Ocean Penthouse" loading="lazy" />
+      <div class="cabin-info">
+        <div class="cabin-type">Ocean Penthouses</div>
+        <h3 class="cabin-name">Penthouses</h3>
+        <p class="cabin-copy">Більше простору для відпочинку, вечері на чотирьох і довгих вечорів на терасі.</p>
+        <div class="cabin-list">
+          <span class="cabin-pill">Penthouse</span>
+          <span class="cabin-pill">Deluxe</span>
+          <span class="cabin-pill">Premier</span>
+          <span class="cabin-pill">Grand</span>
+        </div>
+      </div>
+    </article>
+    <article class="cabin-card reveal">
+      <img class="cabin-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/RETREAT-RESIDENCE-landscape?fit=constrain&amp;fmt=webp&amp;hei=550&amp;ts=1750059535574&amp;wid=1440" alt="Ocean Residence" loading="lazy" />
+      <div class="cabin-info">
+        <div class="cabin-type">Ocean Residences</div>
+        <h3 class="cabin-name">Residences</h3>
+        <p class="cabin-copy">Резиденції з плануванням у стилі апартаментів, розширеними терасами та сервісом Residence Hosts.</p>
+        <div class="cabin-list">
+          <span class="cabin-pill">Cove</span>
+          <span class="cabin-pill">Retreat</span>
+          <span class="cabin-pill">Serenity</span>
+          <span class="cabin-pill">Cocoon</span>
+        </div>
+      </div>
+    </article>
+    <article class="cabin-card featured reveal">
+      <img class="cabin-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/owners-residence-top1?fit=constrain&amp;fmt=webp&amp;hei=550&amp;ts=1755179742116&amp;wid=1440" alt="Owner's Residence" loading="lazy" />
+      <div class="cabin-info">
+        <div class="cabin-type">Owner's Residence</div>
+        <h3 class="cabin-name">Owner's Residences</h3>
+        <p class="cabin-copy">Найвищий рівень життя в океані: простір на всю ширину кормової частини корабля, панорамна тераса, private butler service і відчуття власної вілли на морі.</p>
+        <div class="cabin-list">
+          <span class="cabin-pill">280 sqm</span>
+          <span class="cabin-pill">Infinity whirlpool</span>
+          <span class="cabin-pill">Butler service</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section>
+  <span class="lifestyle-label reveal">Життя на борту</span>
+  <div class="lifestyle-grid">
+    <div class="lifestyle-item reveal">
+      <img class="lifestyle-img" src="assets/image-04.jpg" alt="Ресторан" loading="lazy" />
+      <div class="lifestyle-caption">
+        <div class="lifestyle-tag">9 авторських ресторанів</div>
+        <div class="lifestyle-name">Гастрономія</div>
+      </div>
+    </div>
+    <div class="lifestyle-item reveal">
+      <img class="lifestyle-img" src="assets/image-05.jpg" alt="Тераса" loading="lazy" />
+      <div class="lifestyle-caption">
+        <div class="lifestyle-tag">Свіжий ранок · на борту</div>
+        <div class="lifestyle-name">Ранок на терасі</div>
+      </div>
+    </div>
+    <div class="lifestyle-item reveal">
+      <img class="lifestyle-img" src="assets/image-06.jpg" alt="Wellness" loading="lazy" />
+      <div class="lifestyle-caption">
+        <div class="lifestyle-tag">Ocean Wellness · щодня</div>
+        <div class="lifestyle-name">Спа та відновлення</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="routes-section" id="routes">
+  <span class="routes-label reveal">Напрямки 2025–2026</span>
+  <div class="routes-grid">
+    <div class="route reveal">
+      <img class="route-img" src="assets/image-07.jpg" alt="Mediterranean" loading="lazy" />
+      <div class="route-info">
+        <div class="route-tag">EXPLORA I · EXPLORA II</div>
+        <div class="route-name">Середземне море без поспіху</div>
+        <div class="route-ports">Барселона · Рим · Афіни · Санторіні · Монако · Дубровнік</div>
+      </div>
+    </div>
+    <div class="route reveal">
+      <img class="route-img" src="assets/image-08.jpg" alt="Caribbean" loading="lazy" />
+      <div class="route-info">
+        <div class="route-tag">Сезон 2025 · 2026</div>
+        <div class="route-name">Кариби у форматі приватного люксу</div>
+        <div class="route-ports">Барбадос · Мексика · Куба · Багами · Ямайка</div>
+      </div>
+    </div>
+    <div class="route reveal">
+      <img class="route-img" src="assets/image-09.jpg" alt="Northern Europe" loading="lazy" />
+      <div class="route-info">
+        <div class="route-tag">Фіорди · Полярне сяйво</div>
+        <div class="route-name">Північне сяйво з тераси сьюта</div>
+        <div class="route-ports">Рейк'явік · Норвегія · Гренландія · Шотландія</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="concierge-section">
+  <div class="section-intro reveal">
+    <span class="section-label">Як ми підбираємо</span>
+    <h2 class="section-title">Три питання, і ви бачите найкращі варіанти</h2>
+    <p class="section-copy">Напишіть, коли хочете подорожувати, скільки гостей буде в круїзі та який настрій ближчий: тепле море, міста, відновлення чи маршрут із вау-ефектом.</p>
+  </div>
+  <div class="concierge-steps">
+    <div class="concierge-step reveal">
+      <span class="step-num">01</span>
+      <h3 class="step-title">Ваш сезон</h3>
+      <p class="step-copy">Підберемо дати, у яких погода, маршрут і ціна сходяться найкраще.</p>
+    </div>
+    <div class="concierge-step reveal">
+      <span class="step-num">02</span>
+      <h3 class="step-title">Ваш сьют</h3>
+      <p class="step-copy">Пояснимо різницю між категоріями та підкажемо, де варто доплатити, а де ні.</p>
+    </div>
+    <div class="concierge-step reveal">
+      <span class="step-num">03</span>
+      <h3 class="step-title">Ваш маршрут</h3>
+      <p class="step-copy">Надішлемо короткий список варіантів без десятків зайвих пропозицій.</p>
+    </div>
+  </div>
+  <div class="reveal">
+    <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn">Отримати підбір</a>
+  </div>
+</section>
+
+<section class="price-section">
+  <span class="price-label reveal">Вартість</span>
+  <div class="price-num reveal"><sup>€</sup>850</div>
+  <p class="price-unit reveal">від · за особу · за ніч · усе включено</p>
+  <p class="price-note reveal">9 ресторанів, преміальні напої, шампанське, спа, Wi-Fi і чайові без прихованих доплат.</p>
+  <div class="reveal">
+    <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn">Написати нам</a>
+  </div>
+</section>
+
+<section class="final-section">
+  <h2 class="final-headline reveal">Ви повернетесь<br><em style="color:var(--gold);font-style:italic;">іншими</em></h2>
+  <p class="final-sub reveal">Напишіть нам у Telegram, і ми підберемо 3–5 маршрутів під ваші дати</p>
+  <div class="reveal">
+    <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn">Підібрати мій круїз</a>
+  </div>
+</section>
+
+<a class="mobile-cta" href="https://t.me/theblueocean_cruise" target="_blank">Підібрати круїз</a>
+
+<a class="tg-float" href="https://t.me/theblueocean_cruise" target="_blank" aria-label="Написати в Telegram">
+  <div class="tg-icon">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+  </div>
+  <div class="tg-label">@theblueocean_cruise</div>
+</a>
+
+<footer>
+  <div class="footer-logo">The <em>Blue</em> Ocean</div>
+  <div class="footer-right">@theblueocean_cruise · Explora Journeys · MSC Group</div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-slow').forEach(el => observer.observe(el));
+
+  const heroVideo = document.querySelector('.hero-video');
+  if (heroVideo) {
+    heroVideo.muted = true;
+    heroVideo.defaultMuted = true;
+    heroVideo.setAttribute('muted', '');
+    heroVideo.setAttribute('defaultMuted', '');
+    heroVideo.setAttribute('playsinline', '');
+    heroVideo.setAttribute('webkit-playsinline', '');
+    heroVideo.load();
+
+    const startHeroVideo = () => {
+      const attempt = heroVideo.play();
+      if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {});
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startHeroVideo, { once: true });
+    } else {
+      startHeroVideo();
+    }
+    window.addEventListener('pageshow', startHeroVideo);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) startHeroVideo();
+    });
+  }
+
+  document.querySelectorAll('.reveal').forEach((el) => {
+    const siblings = Array.from(el.parentElement.children).filter(c => c.classList.contains('reveal'));
+    if (siblings.length > 1) el.style.transitionDelay = siblings.indexOf(el) * 0.12 + 's';
+  });
+</script>
+</body>
+</html>
