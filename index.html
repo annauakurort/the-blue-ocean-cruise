@@ -302,6 +302,103 @@
     @media (hover: none) {
       .cabin-carousel-btn { opacity: 1; }
     }
+
+    /* ── Suite side panel ─────────────────────────────────── */
+    .sp-backdrop {
+      position: fixed; inset: 0; z-index: 400;
+      background: rgba(4,9,20,0.55);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.38s, visibility 0.38s;
+    }
+    .sp-backdrop.open { opacity: 1; visibility: visible; }
+    .suite-panel {
+      position: fixed; top: 0; right: 0;
+      width: 50vw; max-width: 780px; height: 100vh;
+      z-index: 401;
+      background: #060d1a;
+      border-left: 1px solid rgba(196,163,90,0.18);
+      transform: translateX(100%);
+      transition: transform 0.48s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .suite-panel.open { transform: translateX(0); }
+    .sp-close {
+      position: absolute; top: 16px; right: 18px; z-index: 10;
+      background: rgba(4,9,20,0.6); border: 1px solid rgba(196,163,90,0.25);
+      color: rgba(242,237,228,0.55); width: 38px; height: 38px;
+      font-size: 22px; line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.2s, background 0.2s;
+    }
+    .sp-close:hover { color: var(--gold); background: rgba(4,9,20,0.9); }
+    .sp-carousel-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: #080f1e;
+    }
+    .sp-carousel {
+      display: flex; height: 100%;
+      transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+    .sp-slide {
+      flex: 0 0 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .sp-dots {
+      position: absolute; bottom: 13px; left: 0; right: 0;
+      display: flex; justify-content: center; gap: 6px; z-index: 5;
+    }
+    .sp-counter {
+      position: absolute; top: 14px; left: 18px;
+      color: rgba(242,237,228,0.5); font-size: 10px;
+      letter-spacing: 0.14em; z-index: 5;
+      font-family: 'Inter', sans-serif;
+    }
+    .sp-body {
+      flex: 1; overflow-y: auto; padding: 30px 38px 44px;
+      scrollbar-width: thin; scrollbar-color: rgba(196,163,90,0.2) transparent;
+    }
+    .sp-type {
+      color: var(--gold); font-size: 9px; letter-spacing: 0.24em;
+      text-transform: uppercase; margin-bottom: 10px;
+      font-family: 'Inter', sans-serif;
+    }
+    .sp-name {
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 36px; font-weight: 300; line-height: 1.15;
+      letter-spacing: 0.02em; margin-bottom: 20px;
+    }
+    .sp-desc {
+      color: rgba(198,190,175,0.82); font-size: 14px; line-height: 1.78;
+      margin-bottom: 26px; font-family: 'Inter', sans-serif;
+    }
+    .sp-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 34px; }
+    .sp-cta {
+      display: inline-block;
+      padding: 14px 34px;
+      background: transparent;
+      border: 1px solid rgba(196,163,90,0.55);
+      color: var(--gold);
+      font-family: 'Inter', sans-serif; font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      text-decoration: none; cursor: pointer;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+    }
+    .sp-cta:hover { background: rgba(196,163,90,0.1); border-color: var(--gold); }
+    /* clickable hint on cabin cards */
+    .cabin-carousel-wrap { cursor: pointer; }
+    .cabin-name-link { cursor: pointer; }
+    .cabin-name-link:hover { color: var(--gold); transition: color 0.25s; }
+    @media (max-width: 860px) {
+      .suite-panel { width: 100vw; max-width: 100vw; }
+    }
+    /* ─────────────────────────────────────────────────────── */
+
     .cabin-info {
       display: flex;
       flex-direction: column;
@@ -1316,6 +1413,27 @@
 </section>
 
 <!-- LIGHTBOX -->
+<!-- Suite side panel -->
+<div class="sp-backdrop" id="sp-backdrop" onclick="closeSuitePanel()"></div>
+<div class="suite-panel" id="suite-panel">
+  <button class="sp-close" onclick="closeSuitePanel()">&#215;</button>
+  <div class="sp-carousel-wrap" id="sp-cw">
+    <div class="sp-carousel" id="sp-carousel" data-idx="0"></div>
+    <button class="cabin-carousel-btn cabin-carousel-prev" onclick="spNav(-1);event.stopPropagation()">&#8249;</button>
+    <button class="cabin-carousel-btn cabin-carousel-next" onclick="spNav(1);event.stopPropagation()">&#8250;</button>
+    <div class="sp-dots" id="sp-dots"></div>
+    <div class="sp-counter" id="sp-counter"></div>
+  </div>
+  <div class="sp-body">
+    <div class="sp-type" id="sp-type"></div>
+    <h2 class="sp-name" id="sp-name"></h2>
+    <p class="sp-desc" id="sp-desc"></p>
+    <div class="sp-pills" id="sp-pills"></div>
+    <a class="sp-cta" href="https://t.me/theblueocean_cruise" target="_blank"
+       id="sp-cta" data-uk="Дізнатись ціну" data-en="Get a Quote">Дізнатись ціну</a>
+  </div>
+</div>
+
 <div class="lb" id="lb" onclick="lbBgClick(event)">
   <button class="lb-close" onclick="closeLightbox()">&#215;</button>
   <button class="lb-btn lb-prev" onclick="lightboxNav(-1);event.stopPropagation()">&#8592;</button>
@@ -1471,6 +1589,113 @@
   lbEl.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - lbTouchX;
     if (Math.abs(dx) > 50) lightboxNav(dx < 0 ? 1 : -1);
+  });
+
+  // ── SUITE SIDE PANEL ──────────────────────────────────────────
+  function openSuitePanel(card) {
+    var panel   = document.getElementById('suite-panel');
+    var backdrop = document.getElementById('sp-backdrop');
+    var carousel = document.getElementById('sp-carousel');
+    var dotsEl   = document.getElementById('sp-dots');
+    var counter  = document.getElementById('sp-counter');
+
+    // populate photos
+    var slides = card.querySelectorAll('.cabin-slide-img');
+    carousel.innerHTML = '';
+    dotsEl.innerHTML   = '';
+    carousel.dataset.idx = 0;
+    carousel.style.transform = 'translateX(0)';
+
+    slides.forEach(function(img, i) {
+      var el = document.createElement('img');
+      el.className = 'sp-slide';
+      el.src = img.src; el.alt = img.alt;
+      carousel.appendChild(el);
+
+      var dot = document.createElement('button');
+      dot.className = 'cabin-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = (function(idx){ return function(e){ e.stopPropagation(); spGoTo(idx); }; })(i);
+      dotsEl.appendChild(dot);
+    });
+    counter.textContent = '1 / ' + slides.length;
+
+    // populate text (reads current language since setLang already ran)
+    var info = card.querySelector('.cabin-info');
+    document.getElementById('sp-type').textContent = info.querySelector('.cabin-type').textContent;
+    document.getElementById('sp-name').textContent = info.querySelector('.cabin-name').textContent;
+    document.getElementById('sp-desc').textContent = info.querySelector('.cabin-copy').textContent;
+
+    var pills = info.querySelectorAll('.cabin-pill');
+    var pillsEl = document.getElementById('sp-pills');
+    pillsEl.innerHTML = '';
+    pills.forEach(function(p) {
+      var s = document.createElement('span');
+      s.className = 'cabin-pill'; s.textContent = p.textContent;
+      pillsEl.appendChild(s);
+    });
+
+    // CTA label
+    var cta = document.getElementById('sp-cta');
+    var lang = document.documentElement.lang || 'uk';
+    cta.textContent = lang === 'en' ? 'Get a Quote' : 'Дізнатись ціну';
+
+    backdrop.classList.add('open');
+    panel.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSuitePanel() {
+    document.getElementById('suite-panel').classList.remove('open');
+    document.getElementById('sp-backdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function spNav(dir) {
+    var carousel = document.getElementById('sp-carousel');
+    var total = carousel.querySelectorAll('.sp-slide').length;
+    var idx = (parseInt(carousel.dataset.idx || 0) + dir + total) % total;
+    spGoTo(idx);
+  }
+  function spGoTo(idx) {
+    var carousel = document.getElementById('sp-carousel');
+    var total = carousel.querySelectorAll('.sp-slide').length;
+    idx = ((idx % total) + total) % total;
+    carousel.dataset.idx = idx;
+    carousel.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    document.querySelectorAll('#sp-dots .cabin-dot').forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+    document.getElementById('sp-counter').textContent = (idx+1) + ' / ' + total;
+  }
+
+  // close on Escape / arrow keys in panel
+  document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('suite-panel').classList.contains('open')) return;
+    if (e.key === 'Escape')      closeSuitePanel();
+    if (e.key === 'ArrowRight')  spNav(1);
+    if (e.key === 'ArrowLeft')   spNav(-1);
+  });
+
+  // swipe inside panel
+  var spTx = 0;
+  document.getElementById('sp-cw').addEventListener('touchstart', function(e){ spTx = e.touches[0].clientX; }, { passive: true });
+  document.getElementById('sp-cw').addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - spTx;
+    if (Math.abs(dx) > 40) spNav(dx < 0 ? 1 : -1);
+  });
+
+  // wire up click on carousel area (not on buttons/dots) and on suite name
+  document.querySelectorAll('.cabin-card').forEach(function(card) {
+    var cw = card.querySelector('.cabin-carousel-wrap');
+    var nm = card.querySelector('.cabin-name');
+    if (cw) {
+      cw.addEventListener('click', function(e) {
+        if (e.target.closest('.cabin-carousel-btn, .cabin-dot')) return;
+        openSuitePanel(card);
+      });
+    }
+    if (nm) {
+      nm.classList.add('cabin-name-link');
+      nm.addEventListener('click', function() { openSuitePanel(card); });
+    }
   });
 
   // ── CABIN CAROUSELS ────────────────────────────────────────────
