@@ -241,16 +241,67 @@
       border: 1px solid var(--faint);
     }
     .cabin-card.featured { grid-column: auto; }
-    .cabin-img {
-      width: 100%;
+    /* Cabin carousel */
+    .cabin-carousel-wrap {
+      position: relative;
       aspect-ratio: 4 / 3;
-      height: auto;
-      object-fit: cover;
-      display: block;
-      filter: brightness(0.62);
-      transition: transform 10s ease, filter 0.5s ease;
+      overflow: hidden;
+      background: #080f1e;
     }
-    .cabin-card:hover .cabin-img { transform: scale(1.04); filter: brightness(0.72); }
+    .cabin-carousel {
+      display: flex;
+      height: 100%;
+      transition: transform 0.48s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .cabin-slide-img {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.62);
+      display: block;
+      transition: filter 0.5s;
+      pointer-events: none;
+    }
+    .cabin-carousel-wrap:hover .cabin-slide-img { filter: brightness(0.72); }
+    .cabin-carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(4,9,20,0.52);
+      border: 1px solid rgba(196,163,90,0.3);
+      color: var(--gold);
+      width: 36px; height: 36px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; line-height: 1;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.25s, background 0.2s;
+      padding: 0;
+    }
+    .cabin-carousel-wrap:hover .cabin-carousel-btn { opacity: 1; }
+    .cabin-carousel-btn:hover { background: rgba(4,9,20,0.85); border-color: rgba(196,163,90,0.6); }
+    .cabin-carousel-prev { left: 10px; }
+    .cabin-carousel-next { right: 10px; }
+    .cabin-carousel-dots {
+      position: absolute;
+      bottom: 11px; left: 0; right: 0;
+      display: flex; justify-content: center; gap: 6px;
+      z-index: 10;
+    }
+    .cabin-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(242,237,228,0.32);
+      border: none; padding: 0; cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+    }
+    .cabin-dot.active { background: var(--gold); transform: scale(1.35); }
+    @media (hover: none) {
+      .cabin-carousel-btn { opacity: 1; }
+    }
     .cabin-info {
       display: flex;
       flex-direction: column;
@@ -455,7 +506,7 @@
       .included-title { font-size: 24px; }
       .cabins-section { padding: 92px 20px 100px; }
       .cabins-grid { grid-template-columns: 1fr; }
-      .cabin-img { aspect-ratio: 16 / 10; }
+      .cabin-carousel-wrap { aspect-ratio: 16 / 10; }
       .cabin-info { min-height: auto; }
       .cabin-info { padding: 24px 20px; }
       .cabin-name { font-size: 26px; min-height: auto; }
@@ -853,7 +904,20 @@
   </div>
   <div class="cabins-grid">
     <article class="cabin-card featured reveal">
-      <img class="cabin-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/OCEAN-TERRACE-SUITE-landscape?fit=constrain&amp;fmt=webp&amp;hei=550&amp;ts=1750059536118&amp;wid=1440" alt="Ocean Terrace Suite" loading="lazy" />
+      <div class="cabin-carousel-wrap">
+        <div class="cabin-carousel" data-idx="0">
+          <img class="cabin-slide-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/OCEAN-TERRACE-SUITE-landscape?fit=constrain&fmt=webp&hei=550&wid=1440" alt="Ocean Terrace Suite" loading="lazy">
+          <img class="cabin-slide-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/OCEAN-GRAND-TERRACE-landscape?fit=constrain&fmt=webp&hei=550&wid=1440" alt="Ocean Grand Terrace" loading="lazy">
+          <img class="cabin-slide-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/OCEAN-TERRACE-SUITE-2?fit=constrain&fmt=webp&hei=550&wid=1440" alt="Ocean Terrace Suite Interior" loading="lazy">
+        </div>
+        <button class="cabin-carousel-btn cabin-carousel-prev" onclick="cabinNav(this.closest('.cabin-carousel-wrap'),-1)" aria-label="Previous">&#8249;</button>
+        <button class="cabin-carousel-btn cabin-carousel-next" onclick="cabinNav(this.closest('.cabin-carousel-wrap'),1)" aria-label="Next">&#8250;</button>
+        <div class="cabin-carousel-dots">
+          <button class="cabin-dot active" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),0)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),1)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),2)"></button>
+        </div>
+      </div>
       <div class="cabin-info">
         <div class="cabin-type">Ocean Suites</div>
         <h3 class="cabin-name">Ocean Terrace Suites</h3>
@@ -868,7 +932,20 @@
       </div>
     </article>
     <article class="cabin-card reveal">
-      <img class="cabin-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/GRAND-PENTHOUSE-11-landscape?fit=constrain&amp;fmt=webp&amp;hei=550&amp;ts=1750059535014&amp;wid=1440" alt="Ocean Penthouse" loading="lazy" />
+      <div class="cabin-carousel-wrap">
+        <div class="cabin-carousel" data-idx="0">
+          <img class="cabin-slide-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/GRAND-PENTHOUSE-11-landscape?fit=constrain&fmt=webp&hei=550&wid=1440" alt="Grand Penthouse" loading="lazy">
+          <img class="cabin-slide-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/DELUXE-PENTHOUSE-landscape?fit=constrain&fmt=webp&hei=550&wid=1440" alt="Deluxe Penthouse" loading="lazy">
+          <img class="cabin-slide-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/DELUXE-PENTHOUSE-2?fit=constrain&fmt=webp&hei=550&wid=1440" alt="Deluxe Penthouse Interior" loading="lazy">
+        </div>
+        <button class="cabin-carousel-btn cabin-carousel-prev" onclick="cabinNav(this.closest('.cabin-carousel-wrap'),-1)" aria-label="Previous">&#8249;</button>
+        <button class="cabin-carousel-btn cabin-carousel-next" onclick="cabinNav(this.closest('.cabin-carousel-wrap'),1)" aria-label="Next">&#8250;</button>
+        <div class="cabin-carousel-dots">
+          <button class="cabin-dot active" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),0)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),1)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),2)"></button>
+        </div>
+      </div>
       <div class="cabin-info">
         <div class="cabin-type">Ocean Penthouses</div>
         <h3 class="cabin-name">Penthouses</h3>
@@ -885,7 +962,20 @@
       </div>
     </article>
     <article class="cabin-card reveal">
-      <img class="cabin-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/RETREAT-RESIDENCE-landscape?fit=constrain&amp;fmt=webp&amp;hei=550&amp;ts=1750059535574&amp;wid=1440" alt="Ocean Residence" loading="lazy" />
+      <div class="cabin-carousel-wrap">
+        <div class="cabin-carousel" data-idx="0">
+          <img class="cabin-slide-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/RETREAT-RESIDENCE-landscape?fit=constrain&fmt=webp&hei=550&wid=1440" alt="Retreat Residence" loading="lazy">
+          <img class="cabin-slide-img" src="https://dm.explorajourneys.com/is/image/ExploraProd/RETREAT-RESIDENCE-2?fit=constrain&fmt=webp&hei=550&wid=1440" alt="Retreat Residence Interior" loading="lazy">
+          <img class="cabin-slide-img" src="assets/serenity-residence-terrace.webp" alt="Serenity Residence Terrace" loading="lazy">
+        </div>
+        <button class="cabin-carousel-btn cabin-carousel-prev" onclick="cabinNav(this.closest('.cabin-carousel-wrap'),-1)" aria-label="Previous">&#8249;</button>
+        <button class="cabin-carousel-btn cabin-carousel-next" onclick="cabinNav(this.closest('.cabin-carousel-wrap'),1)" aria-label="Next">&#8250;</button>
+        <div class="cabin-carousel-dots">
+          <button class="cabin-dot active" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),0)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),1)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),2)"></button>
+        </div>
+      </div>
       <div class="cabin-info">
         <div class="cabin-type">Ocean Residences</div>
         <h3 class="cabin-name">Residences</h3>
@@ -902,7 +992,24 @@
       </div>
     </article>
     <article class="cabin-card featured reveal">
-      <img class="cabin-img" src="assets/OR_21-1.webp" alt="Owner's Residence" loading="lazy" />
+      <div class="cabin-carousel-wrap">
+        <div class="cabin-carousel" data-idx="0">
+          <img class="cabin-slide-img" src="assets/OR_21-1.webp" alt="Owner's Residence - Infinity Pool" loading="lazy">
+          <img class="cabin-slide-img" src="assets/OR_18-1.webp" alt="Owner's Residence - Private Terrace" loading="lazy">
+          <img class="cabin-slide-img" src="assets/OR_08-1.webp" alt="Owner's Residence - Master Suite" loading="lazy">
+          <img class="cabin-slide-img" src="assets/OR_12-1.webp" alt="Owner's Residence - Marble Bath" loading="lazy">
+          <img class="cabin-slide-img" src="assets/OR_06-1.webp" alt="Owner's Residence - Private Dining" loading="lazy">
+        </div>
+        <button class="cabin-carousel-btn cabin-carousel-prev" onclick="cabinNav(this.closest('.cabin-carousel-wrap'),-1)" aria-label="Previous">&#8249;</button>
+        <button class="cabin-carousel-btn cabin-carousel-next" onclick="cabinNav(this.closest('.cabin-carousel-wrap'),1)" aria-label="Next">&#8250;</button>
+        <div class="cabin-carousel-dots">
+          <button class="cabin-dot active" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),0)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),1)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),2)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),3)"></button>
+          <button class="cabin-dot" onclick="cabinGoTo(this.closest('.cabin-carousel-wrap'),4)"></button>
+        </div>
+      </div>
       <div class="cabin-info">
         <div class="cabin-type">Owner's Residence</div>
         <h3 class="cabin-name">Owner's Residences</h3>
@@ -1358,6 +1465,32 @@
   lbEl.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - lbTouchX;
     if (Math.abs(dx) > 50) lightboxNav(dx < 0 ? 1 : -1);
+  });
+
+  // ── CABIN CAROUSELS ────────────────────────────────────────────
+  function cabinNav(wrap, dir) {
+    const carousel = wrap.querySelector('.cabin-carousel');
+    const total = carousel.querySelectorAll('.cabin-slide-img').length;
+    let idx = (parseInt(carousel.dataset.idx || 0) + dir + total) % total;
+    carousel.dataset.idx = idx;
+    carousel.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    wrap.querySelectorAll('.cabin-dot').forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+  }
+  function cabinGoTo(wrap, idx) {
+    const carousel = wrap.querySelector('.cabin-carousel');
+    const total = carousel.querySelectorAll('.cabin-slide-img').length;
+    idx = ((idx % total) + total) % total;
+    carousel.dataset.idx = idx;
+    carousel.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    wrap.querySelectorAll('.cabin-dot').forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+  }
+  document.querySelectorAll('.cabin-carousel-wrap').forEach(function(wrap) {
+    var tx = 0;
+    wrap.addEventListener('touchstart', function(e) { tx = e.touches[0].clientX; }, { passive: true });
+    wrap.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 40) cabinNav(wrap, dx < 0 ? 1 : -1);
+    });
   });
 
   // ── STAGGER REVEAL DELAY ───────────────────────────────────────
