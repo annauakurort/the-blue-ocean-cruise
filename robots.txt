@@ -1,0 +1,16 @@
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: *
+Allow: /ab-test-setup
+
+Sitemap: https://annauakurort.github.io/the-blue-ocean-cruise/sitemap.xml
