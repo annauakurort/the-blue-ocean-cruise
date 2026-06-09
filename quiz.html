@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Підбір круїзу Explora Journeys — The Blue Ocean</title>
+<meta name="description" content="5 питань — і ми підберемо 3 маршрути Explora Journeys під ваш ритм, компанію та стиль відпочинку. Приватний підбір від The Blue Ocean.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://annauakurort.github.io/the-blue-ocean-cruise/quiz.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://annauakurort.github.io/the-blue-ocean-cruise/quiz.html">
+<meta property="og:title" content="Підбір круїзу Explora Journeys — The Blue Ocean">
+<meta property="og:description" content="5 питань — і ми підберемо 3 маршрути під ваш ритм, компанію та стиль відпочинку. Без зайвих варіантів.">
+<meta property="og:image" content="https://annauakurort.github.io/the-blue-ocean-cruise/assets/image-01.jpg">
+<meta property="og:locale" content="uk_UA">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Підбір круїзу Explora Journeys — The Blue Ocean">
+<meta name="twitter:description" content="5 питань — і ми підберемо 3 маршрути під ваш ритм, компанію та стиль відпочинку.">
+<meta name="twitter:image" content="https://annauakurort.github.io/the-blue-ocean-cruise/assets/image-01.jpg">
+
+<meta name="theme-color" content="#060e1c">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ocean:        #060e1c;
+    --deep:         #0d1f3c;
+    --gold:         #c4a35a;
+    --gold-light:   #d4b870;
+    --cream:        #f2ede4;
+    --white:        #ffffff;
+    --text-muted:   rgba(242,237,228,0.45);
+    --text-soft:    rgba(242,237,228,0.80);
+    --card-bg:      rgba(255,255,255,0.04);
+    --card-hover:   rgba(196,163,90,0.10);
+    --card-sel:     rgba(196,163,90,0.17);
+    --border:       rgba(255,255,255,0.10);
+    --border-gold:  rgba(196,163,90,0.50);
+    --radius:       16px;
+    --ease:         0.32s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--ocean);
+    color: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px 60px;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(196,163,90,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 10%, rgba(13,31,60,0.9) 0%, transparent 50%);
+  }
+
+  /* ── NAV BAR ── */
+  .topbar {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0 40px;
+  }
+  .topbar-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .topbar-back {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color var(--ease);
+  }
+  .topbar-back:hover { color: var(--cream); }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 40px;
+    justify-content: center;
+  }
+  .progress-dot {
+    width: 30px; height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.12);
+    transition: var(--ease);
+  }
+  .progress-dot.active { background: var(--gold); }
+  .progress-dot.done   { background: rgba(196,163,90,0.40); }
+
+  /* ── SCREENS ── */
+  .quiz-wrap { width: 100%; max-width: 680px; }
+
+  .screen { display: none; animation: fadeUp 0.48s ease both; }
+  .screen.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── INTRO ── */
+  .brand-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  .intro-title {
+    font-size: clamp(32px, 6vw, 52px);
+    font-weight: 300;
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--cream);
+  }
+  .intro-title em { font-style: italic; color: var(--gold-light); }
+  .divider {
+    width: 40px; height: 1px;
+    background: var(--gold);
+    margin: 0 auto 36px;
+    opacity: 0.45;
+  }
+  .intro-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-soft);
+    text-align: center;
+    line-height: 1.65;
+    margin-bottom: 48px;
+    max-width: 460px;
+    margin-left: auto; margin-right: auto;
+  }
+  .intro-badges {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 44px;
+  }
+  .badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 20px;
+    padding: 7px 14px;
+  }
+
+  /* ── QUESTION ── */
+  .q-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .q-title {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 300;
+    line-height: 1.3;
+    margin-bottom: 32px;
+    color: var(--cream);
+  }
+
+  /* ── CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .cards.col1 { grid-template-columns: 1fr; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    cursor: pointer;
+    transition: var(--ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: var(--radius);
+    opacity: 0;
+    transition: var(--ease);
+    background: linear-gradient(135deg, rgba(196,163,90,0.09), transparent);
+  }
+  .card:hover {
+    border-color: var(--border-gold);
+    background: var(--card-hover);
+    transform: translateY(-2px);
+  }
+  .card:hover::before { opacity: 1; }
+  .card.selected {
+    border-color: var(--gold);
+    background: var(--card-sel);
+  }
+  .card.selected::before { opacity: 1; }
+  .card.selected::after {
+    content: '✓';
+    position: absolute; top: 14px; right: 16px;
+    color: var(--gold);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 600;
+  }
+  .card-icon  { font-size: 26px; margin-bottom: 10px; display: block; }
+  .card-title {
+    font-size: 15px; font-weight: 400;
+    line-height: 1.35; color: var(--cream); margin-bottom: 6px;
+  }
+  .card-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; color: var(--text-muted); line-height: 1.5;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: block; width: 100%;
+    padding: 17px 32px;
+    background: var(--gold); color: var(--ocean);
+    border: none; border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.3px;
+    cursor: pointer; transition: var(--ease); text-align: center;
+  }
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(196,163,90,0.28);
+  }
+  .btn-primary:disabled {
+    opacity: 0.32; cursor: not-allowed;
+    transform: none; box-shadow: none;
+  }
+  .btn-ghost {
+    background: none; border: none;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; cursor: pointer;
+    padding: 12px 0;
+    display: block; margin: 12px auto 0;
+    transition: var(--ease);
+  }
+  .btn-ghost:hover { color: var(--cream); }
+
+  /* ── BACK ── */
+  .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: none; border: none;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; cursor: pointer;
+    padding: 0; margin-bottom: 30px;
+    transition: var(--ease);
+  }
+  .back-btn:hover { color: var(--cream); }
+
+  /* ── RESULT ── */
+  .result-header {
+    background: linear-gradient(135deg, rgba(196,163,90,0.11), rgba(196,163,90,0.03));
+    border: 1px solid rgba(196,163,90,0.22);
+    border-radius: var(--radius);
+    padding: 30px 28px;
+    margin-bottom: 28px;
+  }
+  .result-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 18px;
+  }
+  .result-profile { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .profile-row {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-soft);
+  }
+  .profile-row span:first-child { font-size: 18px; width: 28px; flex-shrink: 0; }
+  .result-message {
+    font-size: 17px; line-height: 1.65; color: var(--cream);
+    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 18px;
+  }
+  .result-message em { color: var(--gold-light); font-style: italic; }
+
+  /* ── FORM ── */
+  .form-section { margin-top: 4px; }
+  .form-title { font-size: 22px; font-weight: 400; margin-bottom: 6px; }
+  .form-sub {
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    color: var(--text-muted); margin-bottom: 22px; line-height: 1.55;
+  }
+  .field { margin-bottom: 13px; }
+  .field label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;
+  }
+  .field input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: var(--cream);
+    font-family: 'Inter', sans-serif; font-size: 15px;
+    outline: none; transition: var(--ease);
+  }
+  .field input::placeholder { color: rgba(242,237,228,0.22); }
+  .field input:focus {
+    border-color: var(--border-gold);
+    background: rgba(255,255,255,0.07);
+  }
+  .field input.error { border-color: rgba(196,163,90,0.65); }
+  .privacy-note {
+    font-family: 'Inter', sans-serif; font-size: 11px;
+    color: rgba(242,237,228,0.28); text-align: center;
+    margin-top: 14px; line-height: 1.5;
+  }
+
+  /* ── THANK YOU ── */
+  .thankyou { text-align: center; padding: 20px 0; }
+  .thankyou .big-icon { font-size: 54px; margin-bottom: 26px; }
+  .thankyou h2 {
+    font-size: clamp(26px, 5vw, 38px); font-weight: 300;
+    margin-bottom: 18px; line-height: 1.25; color: var(--cream);
+  }
+  .thankyou h2 em { color: var(--gold-light); }
+  .thankyou p {
+    font-family: 'Inter', sans-serif; font-size: 15px;
+    color: var(--text-soft); line-height: 1.7;
+    max-width: 440px; margin: 0 auto 32px;
+  }
+  .tg-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 30px;
+    border: 1px solid var(--border-gold); border-radius: 12px;
+    color: var(--gold-light); text-decoration: none;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    transition: var(--ease);
+  }
+  .tg-link:hover { background: var(--card-hover); transform: translateY(-1px); }
+  .thankyou .home-link {
+    display: block; margin-top: 28px;
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    color: var(--text-muted); text-decoration: none;
+    transition: var(--ease);
+  }
+  .thankyou .home-link:hover { color: var(--cream); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 520px) {
+    .cards { grid-template-columns: 1fr; }
+    .result-header { padding: 22px 18px; }
+    .topbar { padding: 20px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="index.html" class="topbar-logo">The Blue Ocean</a>
+  <a href="index.html" class="topbar-back">← На головну</a>
+</div>
+
+<div class="quiz-wrap">
+
+  <!-- PROGRESS -->
+  <div class="progress-bar" id="progressBar" style="display:none;">
+    <div class="progress-dot" id="dot1"></div>
+    <div class="progress-dot" id="dot2"></div>
+    <div class="progress-dot" id="dot3"></div>
+    <div class="progress-dot" id="dot4"></div>
+    <div class="progress-dot" id="dot5"></div>
+  </div>
+
+  <!-- ── S0: INTRO ── -->
+  <div class="screen active" id="s0">
+    <div class="brand-label">The Blue Ocean · Explora Journeys</div>
+    <h1 class="intro-title">Який круїз<br>підходить <em>саме вам?</em></h1>
+    <div class="divider"></div>
+    <p class="intro-sub">5 питань — і ми підберемо 3 маршрути під ваш ритм, компанію та стиль відпочинку. Без зайвих варіантів.</p>
+    <div class="intro-badges">
+      <span class="badge">🌊 Середземне море</span>
+      <span class="badge">🌴 Кариби</span>
+      <span class="badge">🏔️ Скандинавія</span>
+      <span class="badge">🏯 Азія</span>
+    </div>
+    <button class="btn-primary" onclick="goTo(1)">Почати підбір →</button>
+  </div>
+
+  <!-- ── S1: TEMPO ── -->
+  <div class="screen" id="s1">
+    <button class="back-btn" onclick="goTo(0)">← Назад</button>
+    <div class="q-label">Питання 1 з 5</div>
+    <h2 class="q-title">Як виглядає ваш ідеальний день у круїзі?</h2>
+    <div class="cards" id="cards1">
+      <div class="card" onclick="select(this,1,'rest')">
+        <span class="card-icon">☀️</span>
+        <div class="card-title">Ранок на терасі, кава, море</div>
+        <div class="card-sub">Нікуди поспішати. Тиша і простір — головне</div>
+      </div>
+      <div class="card" onclick="select(this,1,'balance')">
+        <span class="card-icon">⚓</span>
+        <div class="card-title">Вранці — новий порт, увечері — на борту</div>
+        <div class="card-sub">Ідеальний баланс між містами та відпочинком</div>
+      </div>
+      <div class="card" onclick="select(this,1,'explore')">
+        <span class="card-icon">🗺️</span>
+        <div class="card-title">Щодня нове місто, максимум вражень</div>
+        <div class="card-sub">Подорож як дослідження, кожен день інший</div>
+      </div>
+      <div class="card" onclick="select(this,1,'unsure')">
+        <span class="card-icon">💬</span>
+        <div class="card-title">Ще не уявляю</div>
+        <div class="card-sub">Хочу почути рекомендацію від фахівця</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="next1" disabled onclick="goTo(2)">Далі →</button>
+  </div>
+
+  <!-- ── S2: WHO ── -->
+  <div class="screen" id="s2">
+    <button class="back-btn" onclick="goTo(1)">← Назад</button>
+    <div class="q-label">Питання 2 з 5</div>
+    <h2 class="q-title">З ким ви плануєте круїз?</h2>
+    <div class="cards" id="cards2">
+      <div class="card" onclick="select(this,2,'couple')">
+        <span class="card-icon">👫</span>
+        <div class="card-title">Вдвох</div>
+        <div class="card-sub">Пара або подорож із другом</div>
+      </div>
+      <div class="card" onclick="select(this,2,'family')">
+        <span class="card-icon">👨‍👩‍👧</span>
+        <div class="card-title">Сім'я з дітьми</div>
+        <div class="card-sub">Потрібен простір і зручність для всіх</div>
+      </div>
+      <div class="card" onclick="select(this,2,'group')">
+        <span class="card-icon">👥</span>
+        <div class="card-title">Компанія друзів</div>
+        <div class="card-sub">Троє і більше, хочеться загального простору</div>
+      </div>
+      <div class="card" onclick="select(this,2,'solo')">
+        <span class="card-icon">🧭</span>
+        <div class="card-title">Соло</div>
+        <div class="card-sub">Подорож для себе, свій ритм і простір</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="next2" disabled onclick="goTo(3)">Далі →</button>
+  </div>
+
+  <!-- ── S3: DESTINATION ── -->
+  <div class="screen" id="s3">
+    <button class="back-btn" onclick="goTo(2)">← Назад</button>
+    <div class="q-label">Питання 3 з 5</div>
+    <h2 class="q-title">Яка картинка вам ближча?</h2>
+    <div class="cards" id="cards3">
+      <div class="card" onclick="select(this,3,'med')">
+        <span class="card-icon">🌊</span>
+        <div class="card-title">Тепле море, античні міста, вино і вечері під зорями</div>
+        <div class="card-sub">Середземне море · Барселона, Рим, Санторіні</div>
+      </div>
+      <div class="card" onclick="select(this,3,'carib')">
+        <span class="card-icon">🌴</span>
+        <div class="card-title">Бірюзова вода, пальми, тепло і повна тиша</div>
+        <div class="card-sub">Кариби · Барбадос, Куба, Мексика</div>
+      </div>
+      <div class="card" onclick="select(this,3,'north')">
+        <span class="card-icon">🏔️</span>
+        <div class="card-title">Фіорди, льодовики, дикий простір</div>
+        <div class="card-sub">Скандинавія · Норвегія, Ісландія, полярне сяйво</div>
+      </div>
+      <div class="card" onclick="select(this,3,'asia')">
+        <span class="card-icon">🏯</span>
+        <div class="card-title">Стародавні храми, острови, екзотика</div>
+        <div class="card-sub">Азія · Японія, Індонезія, В'єтнам</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="next3" disabled onclick="goTo(4)">Далі →</button>
+  </div>
+
+  <!-- ── S4: SUITE ── -->
+  <div class="screen" id="s4">
+    <button class="back-btn" onclick="goTo(3)">← Назад</button>
+    <div class="q-label">Питання 4 з 5</div>
+    <h2 class="q-title">Що для вас важливо у просторі, де ви зупинитесь?</h2>
+    <div class="cards" id="cards4">
+      <div class="card" onclick="select(this,4,'ocean')">
+        <span class="card-icon">🌅</span>
+        <div class="card-title">Приватна тераса з видом на море — must have</div>
+        <div class="card-sub">Ocean Terrace Suite · від €850/ніч</div>
+      </div>
+      <div class="card" onclick="select(this,4,'penthouse')">
+        <span class="card-icon">🛋️</span>
+        <div class="card-title">Більше простору, де комфортно вдвох або вчотирьох</div>
+        <div class="card-sub">Penthouse · просторе планування і тераса</div>
+      </div>
+      <div class="card" onclick="select(this,4,'residence')">
+        <span class="card-icon">🏛️</span>
+        <div class="card-title">Апартаментний рівень — своя їдальня, дворецький</div>
+        <div class="card-sub">Residence або Owner's · найвищий рівень на борту</div>
+      </div>
+      <div class="card" onclick="select(this,4,'advice')">
+        <span class="card-icon">💬</span>
+        <div class="card-title">Ще не думав — хочу, щоб порадили</div>
+        <div class="card-sub">Підберемо оптимальний варіант під вашу поїздку</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="next4" disabled onclick="goTo(5)">Далі →</button>
+  </div>
+
+  <!-- ── S5: WHEN ── -->
+  <div class="screen" id="s5">
+    <button class="back-btn" onclick="goTo(4)">← Назад</button>
+    <div class="q-label">Питання 5 з 5</div>
+    <h2 class="q-title">Коли ви думаєте про подорож?</h2>
+    <div class="cards col1" id="cards5">
+      <div class="card" onclick="select(this,5,'soon')">
+        <span class="card-icon">✈️</span>
+        <div class="card-title">Найближчі 3 місяці</div>
+        <div class="card-sub">Хочу поїхати скоро, актуальні варіанти</div>
+      </div>
+      <div class="card" onclick="select(this,5,'2026')">
+        <span class="card-icon">📅</span>
+        <div class="card-title">До кінця 2026 року</div>
+        <div class="card-sub">Планую заздалегідь, щоб обрати краще</div>
+      </div>
+      <div class="card" onclick="select(this,5,'2027')">
+        <span class="card-icon">🗓️</span>
+        <div class="card-title">2027 рік</div>
+        <div class="card-sub">Далека перспектива, збираю інформацію</div>
+      </div>
+      <div class="card" onclick="select(this,5,'undecided')">
+        <span class="card-icon">🌐</span>
+        <div class="card-title">Ще не визначився</div>
+        <div class="card-sub">Просто цікавлюсь, що є</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="next5" disabled onclick="goTo(6)">Переглянути мій підбір →</button>
+  </div>
+
+  <!-- ── S6: RESULT + FORM ── -->
+  <div class="screen" id="s6">
+    <div class="result-header">
+      <div class="result-label">Ваш профіль круїзу</div>
+      <div class="result-profile" id="profileRows"></div>
+      <div class="result-message" id="resultMessage"></div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="form-title">Отримати 3 персональних маршрути</h3>
+      <p class="form-sub">Вкажіть, як з вами зв'язатись — і ми надішлемо підбір протягом кількох годин</p>
+      <div class="field">
+        <label>Ваше ім'я</label>
+        <input type="text" id="inputName" placeholder="Як вас звати?" autocomplete="given-name">
+      </div>
+      <div class="field">
+        <label>Телефон або Telegram</label>
+        <input type="text" id="inputContact" placeholder="+380 або @username" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label>Email (необов'язково)</label>
+        <input type="email" id="inputEmail" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <button class="btn-primary" onclick="submitForm()" style="margin-top:8px;">Отримати підбір маршрутів →</button>
+      <p class="privacy-note">Ми не надсилаємо розсилок. Лише персональна відповідь від фахівця.</p>
+    </div>
+  </div>
+
+  <!-- ── S7: THANK YOU ── -->
+  <div class="screen" id="s7">
+    <div class="thankyou">
+      <div class="big-icon">🌊</div>
+      <h2>Дякуємо.<br><em>Ми вже за роботою.</em></h2>
+      <p>Протягом кількох годин ми надішлемо вам персональний підбір маршрутів, підготовлений спеціально під ваші відповіді.<br><br>Якщо маєте питання раніше — пишіть у Telegram:</p>
+      <a href="https://t.me/theblueocean_cruise" target="_blank" class="tg-link">
+        <span>✈</span> @theblueocean_cruise
+      </a>
+      <a href="index.html" class="home-link">← Повернутись на сайт</a>
+    </div>
+  </div>
+
+</div><!-- /quiz-wrap -->
+
+<script>
+  const answers = {};
+
+  const labels = {
+    1: { rest:'☀️ Відновлення і тиша', balance:'⚓ Баланс — порти і борт', explore:'🗺️ Дослідження', unsure:'💬 Хочу порадитись' },
+    2: { couple:'👫 Вдвох', family:'👨‍👩‍👧 Сім\'я', group:'👥 Компанія', solo:'🧭 Соло' },
+    3: { med:'🌊 Середземне море', carib:'🌴 Кариби', north:'🏔️ Скандинавія', asia:'🏯 Азія' },
+    4: { ocean:'🌅 Ocean Terrace Suite', penthouse:'🛋️ Penthouse', residence:'🏛️ Residence / Owner\'s', advice:'💬 Хочу пораду' },
+    5: { soon:'✈️ Найближчі 3 місяці', '2026':'📅 До кінця 2026', '2027':'🗓️ 2027 рік', undecided:'🌐 Ще не визначився' }
+  };
+
+  const destMap  = { med:'Середземне море', carib:'Кариби', north:'Скандинавію', asia:'Азію' };
+  const tempoMap = { rest:'відновлення і тишу', balance:'баланс між портами і бортом', explore:'активне дослідження', unsure:'спокійний підхід' };
+  const suiteMap = { ocean:'Ocean Terrace Suite з приватною терасою', penthouse:'Penthouse', residence:'Residence або Owner\'s Residence', advice:'оптимальну категорію сьюту' };
+  const whenMap  = {
+    soon:     'Для вашого терміну є варіанти, але найкращі каюти розбирають швидко.',
+    '2026':   'На осінній і зимовий сезон 2026 залишаються гарні варіанти — варто бронювати зараз.',
+    '2027':   'У 2027 році відкрито бронювання на нові маршрути — гарний час обирати без поспіху.',
+    undecided:'Ми надішлемо кілька варіантів у різних бюджетах — зручно для першого знайомства.'
+  };
+
+  /* ── navigation ── */
+  function goTo(step) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('s' + step).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const bar = document.getElementById('progressBar');
+    if (step >= 1 && step <= 6) {
+      bar.style.display = 'flex';
+      for (let i = 1; i <= 5; i++) {
+        const d = document.getElementById('dot' + i);
+        d.className = 'progress-dot';
+        if (i < step)      d.classList.add('done');
+        else if (i === step) d.classList.add('active');
+      }
+    } else {
+      bar.style.display = 'none';
+    }
+
+    if (step === 6) buildResult();
+
+    if (typeof gtag !== 'undefined') gtag('event', 'quiz_step', { step_number: step });
+  }
+
+  /* ── card selection ── */
+  function select(el, step, value) {
+    answers[step] = value;
+    document.querySelectorAll('#cards' + step + ' .card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('next' + step).disabled = false;
+  }
+
+  /* ── build result screen ── */
+  function buildResult() {
+    const rows = document.getElementById('profileRows');
+    rows.innerHTML = '';
+    for (let i = 1; i <= 5; i++) {
+      const val = answers[i];
+      if (!val || !labels[i][val]) continue;
+      const parts = labels[i][val].split(' ');
+      const row = document.createElement('div');
+      row.className = 'profile-row';
+      row.innerHTML = `<span>${parts[0]}</span><span>${parts.slice(1).join(' ')}</span>`;
+      rows.appendChild(row);
+    }
+    const d = answers[3] || 'med', t = answers[1] || 'balance',
+          s = answers[4] || 'ocean', w = answers[5] || 'undecided';
+    document.getElementById('resultMessage').innerHTML =
+      `На основі ваших відповідей ми бачимо для вас <em>${destMap[d]}</em> — ` +
+      `з фокусом на ${tempoMap[t]}, в ${suiteMap[s]}. ${whenMap[w]}`;
+  }
+
+  /* ── form submit → open Telegram with pre-filled message ── */
+  function submitForm() {
+    const name    = document.getElementById('inputName').value.trim();
+    const contact = document.getElementById('inputContact').value.trim();
+    const email   = document.getElementById('inputEmail').value.trim();
+    const emailOk = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    document.getElementById('inputName').classList.toggle('error', !name);
+    document.getElementById('inputContact').classList.toggle('error', !contact);
+    document.getElementById('inputEmail').classList.toggle('error', !emailOk);
+    if (!name || !contact || !emailOk) return;
+
+    /* build Telegram message from quiz answers */
+    const destLabel  = labels[3][answers[3]] || '—';
+    const tempoLabel = labels[1][answers[1]] || '—';
+    const suiteLabel = labels[4][answers[4]] || '—';
+    const whenLabel  = labels[5][answers[5]] || '—';
+    const whoLabel   = labels[2][answers[2]] || '—';
+
+    const msg = encodeURIComponent(
+      `Привіт! Пройшов(ла) квіз на сайті 🌊\n\n` +
+      `👤 Ім'я: ${name}\n` +
+      `📱 Контакт: ${contact}\n` +
+      (email ? `📧 Email: ${email}\n` : '') +
+      `\n— Ритм: ${tempoLabel}\n` +
+      `— Компанія: ${whoLabel}\n` +
+      `— Напрямок: ${destLabel}\n` +
+      `— Сьют: ${suiteLabel}\n` +
+      `— Коли: ${whenLabel}`
+    );
+
+    /* GA4 / Meta Pixel */
+    if (typeof gtag !== 'undefined') gtag('event', 'generate_lead', { destination: answers[3], suite: answers[4] });
+    if (typeof fbq  !== 'undefined') fbq('track', 'Lead');
+
+    /* open Telegram with pre-filled text, then show thank you */
+    window.open('https://t.me/theblueocean_cruise?text=' + msg, '_blank');
+    goTo(7);
+  }
+</script>
+
+</body>
+</html>
