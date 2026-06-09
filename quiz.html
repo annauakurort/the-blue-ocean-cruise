@@ -685,7 +685,21 @@
       `з фокусом на ${tempoMap[t]}, в ${suiteMap[s]}. ${whenMap[w]}`;
   }
 
-  /* ── form submit → open Telegram with pre-filled message ── */
+  /* ── Telegram Bot ── */
+  const TG_TOKEN = '8943660893:AAF8w_puq4S1mVn-N02t7i88mqRSZIloet0';
+  const TG_CHATS = [366934299, 7645569050];
+
+  function sendTelegram(text) {
+    return Promise.all(TG_CHATS.map(cid =>
+      fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: cid, text, parse_mode: 'HTML' })
+      })
+    ));
+  }
+
+  /* ── form submit ── */
   function submitForm() {
     const name    = document.getElementById('inputName').value.trim();
     const contact = document.getElementById('inputContact').value.trim();
@@ -697,32 +711,36 @@
     document.getElementById('inputEmail').classList.toggle('error', !emailOk);
     if (!name || !contact || !emailOk) return;
 
-    /* build Telegram message from quiz answers */
-    const destLabel  = labels[3][answers[3]] || '—';
-    const tempoLabel = labels[1][answers[1]] || '—';
-    const suiteLabel = labels[4][answers[4]] || '—';
-    const whenLabel  = labels[5][answers[5]] || '—';
-    const whoLabel   = labels[2][answers[2]] || '—';
+    const btn = document.querySelector('#s6 .btn-primary');
+    btn.disabled = true;
+    btn.textContent = 'Надсилаємо…';
 
-    const msg = encodeURIComponent(
-      `Привіт! Пройшов(ла) квіз на сайті 🌊\n\n` +
-      `👤 Ім'я: ${name}\n` +
-      `📱 Контакт: ${contact}\n` +
-      (email ? `📧 Email: ${email}\n` : '') +
-      `\n— Ритм: ${tempoLabel}\n` +
-      `— Компанія: ${whoLabel}\n` +
-      `— Напрямок: ${destLabel}\n` +
-      `— Сьют: ${suiteLabel}\n` +
-      `— Коли: ${whenLabel}`
-    );
+    const now = new Date().toLocaleString('uk-UA', { timeZone:'Europe/Kyiv', day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const text =
+      '🌊 <b>Новий лід з квізу</b>\n' +
+      '━━━━━━━━━━━━━━━━━━\n' +
+      `👤 <b>Ім'я:</b> ${name}\n` +
+      `📱 <b>Контакт:</b> ${contact}\n` +
+      (email ? `📧 <b>Email:</b> ${email}\n` : '') +
+      '\n' +
+      `🗺 <b>Напрямок:</b> ${labels[3][answers[3]] || '—'}\n` +
+      `⚓ <b>Ритм:</b> ${labels[1][answers[1]] || '—'}\n` +
+      `👫 <b>Компанія:</b> ${labels[2][answers[2]] || '—'}\n` +
+      `🛋 <b>Сьют:</b> ${labels[4][answers[4]] || '—'}\n` +
+      `📅 <b>Коли:</b> ${labels[5][answers[5]] || '—'}\n` +
+      '━━━━━━━━━━━━━━━━━━\n' +
+      `🕐 ${now}`;
 
-    /* GA4 / Meta Pixel */
     if (typeof gtag !== 'undefined') gtag('event', 'generate_lead', { destination: answers[3], suite: answers[4] });
     if (typeof fbq  !== 'undefined') fbq('track', 'Lead');
 
-    /* open Telegram with pre-filled text, then show thank you */
-    window.open('https://t.me/theblueocean_cruise?text=' + msg, '_blank');
-    goTo(7);
+    sendTelegram(text)
+      .then(() => goTo(7))
+      .catch(() => goTo(7))
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = 'Отримати підбір маршрутів →';
+      });
   }
 </script>
 

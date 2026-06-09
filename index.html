@@ -1989,6 +1989,20 @@
       'з фокусом на ' + qTempoMap[t] + ', в ' + qSuiteMap[s] + '. ' + qWhenMap[w];
   }
 
+  // ── Telegram Bot config ───────────────────────────────────────
+  var TG_TOKEN   = '8943660893:AAF8w_puq4S1mVn-N02t7i88mqRSZIloet0';
+  var TG_CHATS   = [366934299, 7645569050]; // Anna personal + @theblueocean_cruise
+
+  function qSendTelegram(text) {
+    return Promise.all(TG_CHATS.map(function(cid) {
+      return fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: cid, text: text, parse_mode: 'HTML' })
+      });
+    }));
+  }
+
   function qSubmit() {
     var name    = document.getElementById('qName').value.trim();
     var contact = document.getElementById('qContact').value.trim();
@@ -2000,23 +2014,38 @@
     document.getElementById('qEmail').classList.toggle('err', !emailOk);
     if (!name || !contact || !emailOk) return;
 
-    var msg = encodeURIComponent(
-      'Привіт! Пройшов(ла) квіз на сайті 🌊\n\n' +
-      '👤 Ім\'я: ' + name + '\n' +
-      '📱 Контакт: ' + contact + '\n' +
-      (email ? '📧 Email: ' + email + '\n' : '') +
-      '\n— Ритм: ' + (qLabels[1][qAns[1]]||'—') +
-      '\n— Компанія: ' + (qLabels[2][qAns[2]]||'—') +
-      '\n— Напрямок: ' + (qLabels[3][qAns[3]]||'—') +
-      '\n— Сьют: ' + (qLabels[4][qAns[4]]||'—') +
-      '\n— Коли: ' + (qLabels[5][qAns[5]]||'—')
-    );
+    // Loading state
+    var btn = document.querySelector('#qs6 .q-btn');
+    btn.disabled = true;
+    btn.textContent = 'Надсилаємо…';
+
+    // Build formatted Telegram message
+    var now = new Date().toLocaleString('uk-UA', { timeZone: 'Europe/Kyiv', day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    var text =
+      '🌊 <b>Новий лід з квізу</b>\n' +
+      '━━━━━━━━━━━━━━━━━━\n' +
+      '👤 <b>Ім\'я:</b> ' + name + '\n' +
+      '📱 <b>Контакт:</b> ' + contact + '\n' +
+      (email ? '📧 <b>Email:</b> ' + email + '\n' : '') +
+      '\n' +
+      '🗺 <b>Напрямок:</b> ' + (qLabels[3][qAns[3]] || '—') + '\n' +
+      '⚓ <b>Ритм:</b> ' + (qLabels[1][qAns[1]] || '—') + '\n' +
+      '👫 <b>Компанія:</b> ' + (qLabels[2][qAns[2]] || '—') + '\n' +
+      '🛋 <b>Сьют:</b> ' + (qLabels[4][qAns[4]] || '—') + '\n' +
+      '📅 <b>Коли:</b> ' + (qLabels[5][qAns[5]] || '—') + '\n' +
+      '━━━━━━━━━━━━━━━━━━\n' +
+      '🕐 ' + now;
 
     if (typeof gtag !== 'undefined') gtag('event', 'generate_lead', { destination: qAns[3], suite: qAns[4] });
     if (typeof fbq  !== 'undefined') fbq('track', 'Lead');
 
-    window.open('https://t.me/theblueocean_cruise?text=' + msg, '_blank');
-    qGoTo(7);
+    qSendTelegram(text)
+      .then(function() { qGoTo(7); })
+      .catch(function() { qGoTo(7); }) // show thank-you even if API fails
+      .finally(function() {
+        btn.disabled = false;
+        btn.textContent = 'Отримати підбір маршрутів →';
+      });
   }
 
   // Close on Escape key
