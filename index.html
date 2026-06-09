@@ -674,24 +674,130 @@
     .tg-icon svg { width: 26px; height: 26px; fill: #fff; }
     .tg-label { height: 56px; border-radius: 0 28px 28px 0; margin-left: -28px; padding: 0; background: #229ED9; color: #fff; font-size: 12px; letter-spacing: 0.06em; display: flex; align-items: center; white-space: nowrap; max-width: 0; overflow: hidden; opacity: 0; transition: max-width 0.35s ease, opacity 0.25s ease, padding 0.35s ease; }
 
-    .mobile-cta {
+    /* ── CTA TELEGRAM BUTTON ── */
+    .cta-btn-tg {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 11px; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--cream); text-decoration: none;
+      border: 1px solid rgba(242,237,228,0.28);
+      background: rgba(6,14,28,0.42); backdrop-filter: blur(10px);
+      padding: 20px 36px;
+      transition: background 0.3s, transform 0.2s, border-color 0.3s;
+    }
+    .cta-btn-tg:hover { background: rgba(242,237,228,0.10); transform: translateY(-2px); border-color: rgba(242,237,228,0.5); }
+    .cta-btn-tg svg { width: 17px; height: 17px; fill: #229ED9; flex-shrink: 0; }
+    @media (max-width: 860px) { .cta-btn-tg { padding: 18px 24px; } }
+
+    /* ── QUIZ OVERLAY ── */
+    .quiz-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: var(--black);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.42s cubic-bezier(0.4,0,0.2,1), visibility 0.42s;
+      overflow-y: auto; overflow-x: hidden;
+      display: flex; justify-content: center; align-items: flex-start;
+      padding: 0 16px 60px;
+    }
+    .quiz-overlay.open { opacity: 1; visibility: visible; }
+    .quiz-modal {
+      width: 100%; max-width: 640px;
+      padding-top: 80px;
+    }
+    .quiz-modal-close {
+      position: fixed; top: 18px; right: 20px; z-index: 502;
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 1px solid rgba(242,237,228,0.18);
+      background: rgba(6,14,28,0.85);
+      color: var(--cream); font-size: 22px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .quiz-modal-close:hover { background: rgba(196,163,90,0.15); border-color: var(--gold); }
+
+    /* quiz inside modal – reuse quiz.html CSS vars */
+    .quiz-overlay { --q-ocean: #060e1c; --q-gold: #c4a35a; --q-gold2: #d4b870; --q-cream: #f2ede4; --q-muted: rgba(242,237,228,0.45); --q-soft: rgba(242,237,228,0.80); --q-cbg: rgba(255,255,255,0.04); --q-chov: rgba(196,163,90,0.10); --q-csel: rgba(196,163,90,0.17); --q-bdr: rgba(255,255,255,0.10); --q-bdgold: rgba(196,163,90,0.50); --q-r: 16px; --q-ease: 0.32s cubic-bezier(0.4,0,0.2,1); }
+    .q-progress { display: flex; gap: 6px; margin-bottom: 40px; justify-content: center; }
+    .q-dot { width: 30px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.12); transition: var(--q-ease); }
+    .q-dot.active { background: var(--q-gold); }
+    .q-dot.done   { background: rgba(196,163,90,0.40); }
+    .q-screen { display: none; animation: qFadeUp 0.45s ease both; }
+    .q-screen.active { display: block; }
+    @keyframes qFadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .q-brand { font-family:'Inter',sans-serif; font-size:11px; letter-spacing:3.5px; text-transform:uppercase; color:var(--q-gold); margin-bottom:28px; text-align:center; }
+    .q-h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,5.5vw,50px); font-weight:300; line-height:1.2; text-align:center; margin-bottom:18px; color:var(--q-cream); }
+    .q-h1 em { font-style:italic; color:var(--q-gold2); }
+    .q-divider { width:40px; height:1px; background:var(--q-gold); margin:0 auto 32px; opacity:0.45; }
+    .q-intro-sub { font-family:'Inter',sans-serif; font-size:15px; color:var(--q-soft); text-align:center; line-height:1.65; margin-bottom:44px; max-width:460px; margin-left:auto; margin-right:auto; }
+    .q-badges { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:44px; }
+    .q-badge { font-family:'Inter',sans-serif; font-size:11px; letter-spacing:1px; color:var(--q-muted); border:1px solid rgba(255,255,255,0.10); border-radius:20px; padding:7px 14px; }
+    .q-lbl { font-family:'Inter',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--q-gold); margin-bottom:14px; }
+    .q-title { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,4vw,32px); font-weight:300; line-height:1.3; margin-bottom:30px; color:var(--q-cream); }
+    .q-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:28px; }
+    .q-cards.col1 { grid-template-columns:1fr; }
+    .q-card { background:var(--q-cbg); border:1px solid var(--q-bdr); border-radius:var(--q-r); padding:18px 20px; cursor:pointer; transition:var(--q-ease); position:relative; overflow:hidden; }
+    .q-card::before { content:''; position:absolute; inset:0; border-radius:var(--q-r); opacity:0; transition:var(--q-ease); background:linear-gradient(135deg,rgba(196,163,90,0.09),transparent); }
+    .q-card:hover { border-color:var(--q-bdgold); background:var(--q-chov); transform:translateY(-2px); }
+    .q-card:hover::before { opacity:1; }
+    .q-card.sel { border-color:var(--q-gold); background:var(--q-csel); }
+    .q-card.sel::before { opacity:1; }
+    .q-card.sel::after { content:'✓'; position:absolute; top:13px; right:14px; color:var(--q-gold); font-family:'Inter',sans-serif; font-size:13px; font-weight:600; }
+    .q-ci { font-size:24px; margin-bottom:8px; display:block; }
+    .q-ct { font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:400; line-height:1.35; color:var(--q-cream); margin-bottom:5px; }
+    .q-cs { font-family:'Inter',sans-serif; font-size:12px; color:var(--q-muted); line-height:1.45; }
+    .q-btn { display:block; width:100%; padding:17px 32px; background:var(--q-gold); color:var(--q-ocean); border:none; border-radius:12px; font-family:'Inter',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:var(--q-ease); text-align:center; }
+    .q-btn:hover { background:var(--q-gold2); transform:translateY(-1px); box-shadow:0 8px 30px rgba(196,163,90,0.28); }
+    .q-btn:disabled { opacity:0.32; cursor:not-allowed; transform:none; box-shadow:none; }
+    .q-back { display:flex; align-items:center; gap:6px; background:none; border:none; color:var(--q-muted); font-family:'Inter',sans-serif; font-size:13px; cursor:pointer; padding:0; margin-bottom:28px; transition:var(--q-ease); }
+    .q-back:hover { color:var(--q-cream); }
+    .q-result-box { background:linear-gradient(135deg,rgba(196,163,90,0.11),rgba(196,163,90,0.03)); border:1px solid rgba(196,163,90,0.22); border-radius:var(--q-r); padding:28px 26px; margin-bottom:26px; }
+    .q-res-lbl { font-family:'Inter',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--q-gold); margin-bottom:16px; }
+    .q-profile { display:flex; flex-direction:column; gap:9px; margin-bottom:20px; }
+    .q-prow { display:flex; align-items:center; gap:12px; font-family:'Inter',sans-serif; font-size:14px; color:var(--q-soft); }
+    .q-prow span:first-child { font-size:18px; width:28px; flex-shrink:0; }
+    .q-res-msg { font-family:'Cormorant Garamond',serif; font-size:17px; line-height:1.65; color:var(--q-cream); border-top:1px solid rgba(255,255,255,0.08); padding-top:16px; }
+    .q-res-msg em { color:var(--q-gold2); font-style:italic; }
+    .q-form-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; margin-bottom:6px; color:var(--q-cream); }
+    .q-form-sub { font-family:'Inter',sans-serif; font-size:13px; color:var(--q-muted); margin-bottom:20px; line-height:1.55; }
+    .q-field { margin-bottom:12px; }
+    .q-field label { display:block; font-family:'Inter',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--q-muted); margin-bottom:7px; }
+    .q-field input { width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--q-bdr); border-radius:10px; padding:13px 16px; color:var(--q-cream); font-family:'Inter',sans-serif; font-size:15px; outline:none; transition:var(--q-ease); }
+    .q-field input::placeholder { color:rgba(242,237,228,0.22); }
+    .q-field input:focus { border-color:var(--q-bdgold); background:rgba(255,255,255,0.07); }
+    .q-field input.err { border-color:rgba(196,163,90,0.7); }
+    .q-privacy { font-family:'Inter',sans-serif; font-size:11px; color:rgba(242,237,228,0.28); text-align:center; margin-top:12px; line-height:1.5; }
+    .q-ty { text-align:center; padding:20px 0 10px; }
+    .q-ty .q-big { font-size:52px; margin-bottom:22px; }
+    .q-ty h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(26px,5vw,38px); font-weight:300; margin-bottom:16px; line-height:1.25; color:var(--q-cream); }
+    .q-ty h2 em { color:var(--q-gold2); }
+    .q-ty p { font-family:'Inter',sans-serif; font-size:15px; color:var(--q-soft); line-height:1.7; max-width:440px; margin:0 auto 28px; }
+    .q-tg-link { display:inline-flex; align-items:center; gap:10px; padding:15px 28px; border:1px solid var(--q-bdgold); border-radius:12px; color:var(--q-gold2); text-decoration:none; font-family:'Inter',sans-serif; font-size:14px; transition:var(--q-ease); }
+    .q-tg-link:hover { background:var(--q-chov); transform:translateY(-1px); }
+    .q-close-after { display:block; margin-top:24px; background:none; border:none; color:var(--q-muted); font-family:'Inter',sans-serif; font-size:13px; cursor:pointer; transition:var(--q-ease); }
+    .q-close-after:hover { color:var(--q-cream); }
+
+    .mobile-cta-row {
       position: fixed;
-      left: 14px;
-      right: 14px;
+      left: 14px; right: 14px;
       bottom: max(14px, env(safe-area-inset-bottom));
       z-index: 99;
       display: none;
-      align-items: center;
-      justify-content: center;
+      gap: 8px;
+    }
+    .mobile-cta {
+      display: flex; align-items: center; justify-content: center;
       min-height: 52px;
-      background: var(--gold);
-      color: var(--black);
-      text-decoration: none;
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
+      font-size: 10px; font-weight: 400;
+      letter-spacing: 0.22em; text-transform: uppercase;
       box-shadow: 0 10px 34px rgba(0,0,0,0.35);
+      border: none; text-decoration: none; cursor: pointer;
+    }
+    .mobile-cta-quiz {
+      flex: 1;
+      background: var(--gold); color: var(--black);
+    }
+    .mobile-cta-tg {
+      width: 52px; flex-shrink: 0;
+      background: #229ED9;
     }
 
     .final-section { padding: 160px 24px; text-align: center; border-top: 1px solid var(--faint); }
@@ -817,8 +923,8 @@
       .tg-icon { width: 48px; height: 48px; }
       .tg-icon svg { width: 22px; height: 22px; }
       .tg-float { display: none; }
-      .mobile-cta { display: flex; }
-      body { padding-bottom: 76px; }
+      .mobile-cta-row { display: flex; }
+      body { padding-bottom: 80px; }
     }
 
     /* SMALL MOBILE */
@@ -981,12 +1087,13 @@
       data-en="Luxury voyages with Explora Journeys for guests who value silence, impeccable service and the feeling of limitless space at sea."
     >Люксові подорожі Explora Journeys для гостей, які цінують тишу, сервіс і відчуття власного простору в океані.</p>
     <div class="hero-actions reveal-slow">
-      <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn"
+      <button class="cta-btn" onclick="openQuiz()"
         data-uk="Підібрати круїз" data-en="Find My Cruise"
-      >Підібрати круїз</a>
-      <a href="#routes" class="cta-btn secondary"
-        data-uk="Переглянути напрямки" data-en="View Routes"
-      >Переглянути напрямки</a>
+      >Підібрати круїз</button>
+      <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn-tg">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span data-uk="Написати у Telegram" data-en="Message on Telegram">Написати у Telegram</span>
+      </a>
     </div>
   </div>
   <div class="hero-scroll-hint"><div class="scroll-dot"></div></div>
@@ -1574,9 +1681,9 @@
     </div>
   </div>
   <div class="reveal">
-    <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn"
+    <button class="cta-btn" onclick="openQuiz()"
       data-uk="Отримати підбір" data-en="Get a Curation"
-    >Отримати підбір</a>
+    >Отримати підбір</button>
   </div>
 </section>
 
@@ -1607,12 +1714,145 @@
     data-uk="Напишіть нам у Telegram, і ми підберемо 3–5 маршрутів під ваші дати"
     data-en="Message us on Telegram, and we'll curate 3–5 routes tailored to your dates"
   >Напишіть нам у Telegram, і ми підберемо 3–5 маршрутів під ваші дати</p>
-  <div class="reveal">
-    <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn"
+  <div class="reveal" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+    <button class="cta-btn" onclick="openQuiz()"
       data-uk="Підібрати мій круїз" data-en="Find My Cruise"
-    >Підібрати мій круїз</a>
+    >Підібрати мій круїз</button>
+    <a href="https://t.me/theblueocean_cruise" target="_blank" class="cta-btn-tg">
+      <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      <span data-uk="Написати у Telegram" data-en="Message on Telegram">Написати у Telegram</span>
+    </a>
   </div>
 </section>
+
+<!-- ═══════════════════════════════════ QUIZ MODAL ═══════════════════════════════════ -->
+<div class="quiz-overlay" id="quizOverlay">
+  <button class="quiz-modal-close" onclick="closeQuiz()" aria-label="Закрити">&#215;</button>
+  <div class="quiz-modal">
+
+    <!-- progress -->
+    <div class="q-progress" id="qProgressBar" style="display:none;">
+      <div class="q-dot" id="qd1"></div>
+      <div class="q-dot" id="qd2"></div>
+      <div class="q-dot" id="qd3"></div>
+      <div class="q-dot" id="qd4"></div>
+      <div class="q-dot" id="qd5"></div>
+    </div>
+
+    <!-- S0: INTRO -->
+    <div class="q-screen active" id="qs0">
+      <div class="q-brand">The Blue Ocean · Explora Journeys</div>
+      <h2 class="q-h1">Який круїз<br>підходить <em>саме вам?</em></h2>
+      <div class="q-divider"></div>
+      <p class="q-intro-sub">5 питань — і ми підберемо 3 маршрути під ваш ритм, компанію та стиль відпочинку. Без зайвих варіантів.</p>
+      <div class="q-badges">
+        <span class="q-badge">🌊 Середземне море</span>
+        <span class="q-badge">🌴 Кариби</span>
+        <span class="q-badge">🏔️ Скандинавія</span>
+        <span class="q-badge">🏯 Азія</span>
+      </div>
+      <button class="q-btn" onclick="qGoTo(1)">Почати підбір →</button>
+    </div>
+
+    <!-- S1: TEMPO -->
+    <div class="q-screen" id="qs1">
+      <button class="q-back" onclick="qGoTo(0)">← Назад</button>
+      <div class="q-lbl">Питання 1 з 5</div>
+      <h3 class="q-title">Як виглядає ваш ідеальний день у круїзі?</h3>
+      <div class="q-cards" id="qc1">
+        <div class="q-card" onclick="qSel(this,1,'rest')"><span class="q-ci">☀️</span><div class="q-ct">Ранок на терасі, кава, море</div><div class="q-cs">Нікуди поспішати. Тиша і простір — головне</div></div>
+        <div class="q-card" onclick="qSel(this,1,'balance')"><span class="q-ci">⚓</span><div class="q-ct">Вранці — новий порт, увечері — на борту</div><div class="q-cs">Ідеальний баланс між містами та відпочинком</div></div>
+        <div class="q-card" onclick="qSel(this,1,'explore')"><span class="q-ci">🗺️</span><div class="q-ct">Щодня нове місто, максимум вражень</div><div class="q-cs">Подорож як дослідження, кожен день інший</div></div>
+        <div class="q-card" onclick="qSel(this,1,'unsure')"><span class="q-ci">💬</span><div class="q-ct">Ще не уявляю</div><div class="q-cs">Хочу почути рекомендацію від фахівця</div></div>
+      </div>
+      <button class="q-btn" id="qn1" disabled onclick="qGoTo(2)">Далі →</button>
+    </div>
+
+    <!-- S2: WHO -->
+    <div class="q-screen" id="qs2">
+      <button class="q-back" onclick="qGoTo(1)">← Назад</button>
+      <div class="q-lbl">Питання 2 з 5</div>
+      <h3 class="q-title">З ким ви плануєте круїз?</h3>
+      <div class="q-cards" id="qc2">
+        <div class="q-card" onclick="qSel(this,2,'couple')"><span class="q-ci">👫</span><div class="q-ct">Вдвох</div><div class="q-cs">Пара або подорож із другом</div></div>
+        <div class="q-card" onclick="qSel(this,2,'family')"><span class="q-ci">👨‍👩‍👧</span><div class="q-ct">Сім'я з дітьми</div><div class="q-cs">Потрібен простір і зручність для всіх</div></div>
+        <div class="q-card" onclick="qSel(this,2,'group')"><span class="q-ci">👥</span><div class="q-ct">Компанія друзів</div><div class="q-cs">Троє і більше, хочеться загального простору</div></div>
+        <div class="q-card" onclick="qSel(this,2,'solo')"><span class="q-ci">🧭</span><div class="q-ct">Соло</div><div class="q-cs">Подорож для себе, свій ритм і простір</div></div>
+      </div>
+      <button class="q-btn" id="qn2" disabled onclick="qGoTo(3)">Далі →</button>
+    </div>
+
+    <!-- S3: DESTINATION -->
+    <div class="q-screen" id="qs3">
+      <button class="q-back" onclick="qGoTo(2)">← Назад</button>
+      <div class="q-lbl">Питання 3 з 5</div>
+      <h3 class="q-title">Яка картинка вам ближча?</h3>
+      <div class="q-cards" id="qc3">
+        <div class="q-card" onclick="qSel(this,3,'med')"><span class="q-ci">🌊</span><div class="q-ct">Тепле море, античні міста, вино і вечері під зорями</div><div class="q-cs">Середземне море · Барселона, Рим, Санторіні</div></div>
+        <div class="q-card" onclick="qSel(this,3,'carib')"><span class="q-ci">🌴</span><div class="q-ct">Бірюзова вода, пальми, тепло і повна тиша</div><div class="q-cs">Кариби · Барбадос, Куба, Мексика</div></div>
+        <div class="q-card" onclick="qSel(this,3,'north')"><span class="q-ci">🏔️</span><div class="q-ct">Фіорди, льодовики, дикий простір</div><div class="q-cs">Скандинавія · Норвегія, Ісландія, полярне сяйво</div></div>
+        <div class="q-card" onclick="qSel(this,3,'asia')"><span class="q-ci">🏯</span><div class="q-ct">Стародавні храми, острови, екзотика</div><div class="q-cs">Азія · Японія, Індонезія, В'єтнам</div></div>
+      </div>
+      <button class="q-btn" id="qn3" disabled onclick="qGoTo(4)">Далі →</button>
+    </div>
+
+    <!-- S4: SUITE -->
+    <div class="q-screen" id="qs4">
+      <button class="q-back" onclick="qGoTo(3)">← Назад</button>
+      <div class="q-lbl">Питання 4 з 5</div>
+      <h3 class="q-title">Що для вас важливо у просторі, де ви зупинитесь?</h3>
+      <div class="q-cards" id="qc4">
+        <div class="q-card" onclick="qSel(this,4,'ocean')"><span class="q-ci">🌅</span><div class="q-ct">Приватна тераса з видом на море — must have</div><div class="q-cs">Ocean Terrace Suite · від €850/ніч</div></div>
+        <div class="q-card" onclick="qSel(this,4,'penthouse')"><span class="q-ci">🛋️</span><div class="q-ct">Більше простору, де комфортно вдвох або вчотирьох</div><div class="q-cs">Penthouse · просторе планування і тераса</div></div>
+        <div class="q-card" onclick="qSel(this,4,'residence')"><span class="q-ci">🏛️</span><div class="q-ct">Апартаментний рівень — своя їдальня, дворецький</div><div class="q-cs">Residence або Owner's · найвищий рівень на борту</div></div>
+        <div class="q-card" onclick="qSel(this,4,'advice')"><span class="q-ci">💬</span><div class="q-ct">Ще не думав — хочу, щоб порадили</div><div class="q-cs">Підберемо оптимальний варіант під вашу поїздку</div></div>
+      </div>
+      <button class="q-btn" id="qn4" disabled onclick="qGoTo(5)">Далі →</button>
+    </div>
+
+    <!-- S5: WHEN -->
+    <div class="q-screen" id="qs5">
+      <button class="q-back" onclick="qGoTo(4)">← Назад</button>
+      <div class="q-lbl">Питання 5 з 5</div>
+      <h3 class="q-title">Коли ви думаєте про подорож?</h3>
+      <div class="q-cards col1" id="qc5">
+        <div class="q-card" onclick="qSel(this,5,'soon')"><span class="q-ci">✈️</span><div class="q-ct">Найближчі 3 місяці</div><div class="q-cs">Хочу поїхати скоро, актуальні варіанти</div></div>
+        <div class="q-card" onclick="qSel(this,5,'2026')"><span class="q-ci">📅</span><div class="q-ct">До кінця 2026 року</div><div class="q-cs">Планую заздалегідь, щоб обрати краще</div></div>
+        <div class="q-card" onclick="qSel(this,5,'2027')"><span class="q-ci">🗓️</span><div class="q-ct">2027 рік</div><div class="q-cs">Далека перспектива, збираю інформацію</div></div>
+        <div class="q-card" onclick="qSel(this,5,'undecided')"><span class="q-ci">🌐</span><div class="q-ct">Ще не визначився</div><div class="q-cs">Просто цікавлюсь, що є</div></div>
+      </div>
+      <button class="q-btn" id="qn5" disabled onclick="qGoTo(6)">Переглянути мій підбір →</button>
+    </div>
+
+    <!-- S6: RESULT + FORM -->
+    <div class="q-screen" id="qs6">
+      <div class="q-result-box">
+        <div class="q-res-lbl">Ваш профіль круїзу</div>
+        <div class="q-profile" id="qProfileRows"></div>
+        <div class="q-res-msg" id="qResultMsg"></div>
+      </div>
+      <h3 class="q-form-title">Отримати 3 персональних маршрути</h3>
+      <p class="q-form-sub">Вкажіть, як з вами зв'язатись — і ми надішлемо підбір протягом кількох годин</p>
+      <div class="q-field"><label>Ваше ім'я</label><input type="text" id="qName" placeholder="Як вас звати?" autocomplete="given-name"></div>
+      <div class="q-field"><label>Телефон або Telegram</label><input type="text" id="qContact" placeholder="+380 або @username" autocomplete="tel"></div>
+      <div class="q-field"><label>Email (необов'язково)</label><input type="email" id="qEmail" placeholder="your@email.com" autocomplete="email"></div>
+      <button class="q-btn" onclick="qSubmit()" style="margin-top:8px;">Отримати підбір маршрутів →</button>
+      <p class="q-privacy">Ми не надсилаємо розсилок. Лише персональна відповідь від фахівця.</p>
+    </div>
+
+    <!-- S7: THANK YOU -->
+    <div class="q-screen" id="qs7">
+      <div class="q-ty">
+        <div class="q-big">🌊</div>
+        <h2>Дякуємо.<br><em>Ми вже за роботою.</em></h2>
+        <p>Протягом кількох годин ми надішлемо вам персональний підбір маршрутів.<br><br>Якщо маєте питання раніше — пишіть у Telegram:</p>
+        <a href="https://t.me/theblueocean_cruise" target="_blank" class="q-tg-link">✈ @theblueocean_cruise</a>
+        <button class="q-close-after" onclick="closeQuiz()">← Повернутись на сайт</button>
+      </div>
+    </div>
+
+  </div><!-- /quiz-modal -->
+</div><!-- /quiz-overlay -->
 
 <!-- LIGHTBOX -->
 <!-- Suite side panel -->
@@ -1644,9 +1884,14 @@
   <div class="lb-count" id="lb-count"></div>
 </div>
 
-<a class="mobile-cta" href="https://t.me/theblueocean_cruise" target="_blank"
-  data-uk="Підібрати круїз" data-en="Find a Cruise"
->Підібрати круїз</a>
+<div class="mobile-cta-row">
+  <button class="mobile-cta mobile-cta-quiz" onclick="openQuiz()"
+    data-uk="Підібрати круїз" data-en="Find My Cruise"
+  >Підібрати круїз</button>
+  <a class="mobile-cta mobile-cta-tg" href="https://t.me/theblueocean_cruise" target="_blank" aria-label="Telegram">
+    <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#fff" d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+  </a>
+</div>
 
 <a class="tg-float" href="https://t.me/theblueocean_cruise" target="_blank" aria-label="Telegram">
   <div class="tg-icon">
@@ -1661,6 +1906,126 @@
 </footer>
 
 <script>
+  // ════════════════════════════════════════════════════════════════
+  // QUIZ MODAL
+  // ════════════════════════════════════════════════════════════════
+  var qAns = {};
+
+  var qLabels = {
+    1: { rest:'☀️ Відновлення і тиша', balance:'⚓ Баланс — порти і борт', explore:'🗺️ Дослідження', unsure:'💬 Хочу порадитись' },
+    2: { couple:'👫 Вдвох', family:'👨‍👩‍👧 Сім\'я', group:'👥 Компанія', solo:'🧭 Соло' },
+    3: { med:'🌊 Середземне море', carib:'🌴 Кариби', north:'🏔️ Скандинавія', asia:'🏯 Азія' },
+    4: { ocean:'🌅 Ocean Terrace Suite', penthouse:'🛋️ Penthouse', residence:'🏛️ Residence / Owner\'s', advice:'💬 Хочу пораду' },
+    5: { soon:'✈️ Найближчі 3 місяці', '2026':'📅 До кінця 2026', '2027':'🗓️ 2027 рік', undecided:'🌐 Ще не визначився' }
+  };
+
+  var qDestMap  = { med:'Середземне море', carib:'Кариби', north:'Скандинавію', asia:'Азію' };
+  var qTempoMap = { rest:'відновлення і тишу', balance:'баланс між портами і бортом', explore:'активне дослідження', unsure:'спокійний підхід' };
+  var qSuiteMap = { ocean:'Ocean Terrace Suite з приватною терасою', penthouse:'Penthouse', residence:'Residence або Owner\'s Residence', advice:'оптимальну категорію сьюту' };
+  var qWhenMap  = {
+    soon:     'Для вашого терміну є варіанти, але найкращі каюти розбирають швидко.',
+    '2026':   'На осінній і зимовий сезон 2026 залишаються гарні варіанти — варто бронювати зараз.',
+    '2027':   'У 2027 році відкрито бронювання на нові маршрути — гарний час обирати без поспіху.',
+    undecided:'Ми надішлемо кілька варіантів у різних бюджетах — зручно для першого знайомства.'
+  };
+
+  function openQuiz() {
+    var ov = document.getElementById('quizOverlay');
+    ov.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    qGoTo(0);
+  }
+
+  function closeQuiz() {
+    var ov = document.getElementById('quizOverlay');
+    ov.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function qGoTo(step) {
+    var overlay = document.getElementById('quizOverlay');
+    overlay.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelectorAll('.q-screen').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById('qs' + step).classList.add('active');
+
+    var bar = document.getElementById('qProgressBar');
+    if (step >= 1 && step <= 6) {
+      bar.style.display = 'flex';
+      for (var i = 1; i <= 5; i++) {
+        var d = document.getElementById('qd' + i);
+        d.className = 'q-dot';
+        if (i < step)       d.classList.add('done');
+        else if (i === step) d.classList.add('active');
+      }
+    } else {
+      bar.style.display = 'none';
+    }
+    if (step === 6) qBuildResult();
+    if (typeof gtag !== 'undefined') gtag('event', 'quiz_step', { step_number: step });
+  }
+
+  function qSel(el, step, value) {
+    qAns[step] = value;
+    document.querySelectorAll('#qc' + step + ' .q-card').forEach(function(c){ c.classList.remove('sel'); });
+    el.classList.add('sel');
+    document.getElementById('qn' + step).disabled = false;
+  }
+
+  function qBuildResult() {
+    var rows = document.getElementById('qProfileRows');
+    rows.innerHTML = '';
+    for (var i = 1; i <= 5; i++) {
+      var val = qAns[i];
+      if (!val || !qLabels[i][val]) continue;
+      var parts = qLabels[i][val].split(' ');
+      var row = document.createElement('div');
+      row.className = 'q-prow';
+      row.innerHTML = '<span>' + parts[0] + '</span><span>' + parts.slice(1).join(' ') + '</span>';
+      rows.appendChild(row);
+    }
+    var d = qAns[3]||'med', t = qAns[1]||'balance', s = qAns[4]||'ocean', w = qAns[5]||'undecided';
+    document.getElementById('qResultMsg').innerHTML =
+      'На основі ваших відповідей ми бачимо для вас <em>' + qDestMap[d] + '</em> — ' +
+      'з фокусом на ' + qTempoMap[t] + ', в ' + qSuiteMap[s] + '. ' + qWhenMap[w];
+  }
+
+  function qSubmit() {
+    var name    = document.getElementById('qName').value.trim();
+    var contact = document.getElementById('qContact').value.trim();
+    var email   = document.getElementById('qEmail').value.trim();
+    var emailOk = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    document.getElementById('qName').classList.toggle('err', !name);
+    document.getElementById('qContact').classList.toggle('err', !contact);
+    document.getElementById('qEmail').classList.toggle('err', !emailOk);
+    if (!name || !contact || !emailOk) return;
+
+    var msg = encodeURIComponent(
+      'Привіт! Пройшов(ла) квіз на сайті 🌊\n\n' +
+      '👤 Ім\'я: ' + name + '\n' +
+      '📱 Контакт: ' + contact + '\n' +
+      (email ? '📧 Email: ' + email + '\n' : '') +
+      '\n— Ритм: ' + (qLabels[1][qAns[1]]||'—') +
+      '\n— Компанія: ' + (qLabels[2][qAns[2]]||'—') +
+      '\n— Напрямок: ' + (qLabels[3][qAns[3]]||'—') +
+      '\n— Сьют: ' + (qLabels[4][qAns[4]]||'—') +
+      '\n— Коли: ' + (qLabels[5][qAns[5]]||'—')
+    );
+
+    if (typeof gtag !== 'undefined') gtag('event', 'generate_lead', { destination: qAns[3], suite: qAns[4] });
+    if (typeof fbq  !== 'undefined') fbq('track', 'Lead');
+
+    window.open('https://t.me/theblueocean_cruise?text=' + msg, '_blank');
+    qGoTo(7);
+  }
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('quizOverlay').classList.contains('open')) {
+      closeQuiz();
+    }
+  });
+
   // ── LANGUAGE SWITCHER ──────────────────────────────────────────
   const TRANSLATIONS = {
     uk: { title: 'The Blue Ocean - Explora Journeys', desc: 'Круїзи Explora Journeys: Середземне море, Кариби, Атлантика та інші маршрути. Приватний підбір для українських гостей.' },
