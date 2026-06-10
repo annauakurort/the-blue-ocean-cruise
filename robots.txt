@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /ab-test-setup
 
-Sitemap: https://annauakurort.github.io/the-blue-ocean-cruise/sitemap.xml
+Sitemap: https://theblueoceancruises.com/sitemap.xml

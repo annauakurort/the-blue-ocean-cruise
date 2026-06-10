@@ -2,20 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://annauakurort.github.io/the-blue-ocean-cruise/</loc>
+    <loc>https://theblueoceancruises.com/</loc>
     <lastmod>2026-06-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://annauakurort.github.io/the-blue-ocean-cruise/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://annauakurort.github.io/the-blue-ocean-cruise/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://annauakurort.github.io/the-blue-ocean-cruise/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://theblueoceancruises.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://theblueoceancruises.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://theblueoceancruises.com/"/>
   </url>
   <url>
-    <loc>https://annauakurort.github.io/the-blue-ocean-cruise/quiz.html</loc>
+    <loc>https://theblueoceancruises.com/quiz.html</loc>
     <lastmod>2026-06-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://annauakurort.github.io/the-blue-ocean-cruise/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://annauakurort.github.io/the-blue-ocean-cruise/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://theblueoceancruises.com/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://theblueoceancruises.com/quiz.html"/>
   </url>
 </urlset>
