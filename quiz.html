@@ -7,6 +7,26 @@
 <meta name="description" content="5 питань — і ми підберемо 3 маршрути Explora Journeys під ваш ритм, компанію та стиль відпочинку. Приватний підбір від The Blue Ocean.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://theblueoceancruises.com/quiz.html">
+<!-- Google Consent Mode v2 defaults -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  var _consent = localStorage.getItem('cookie_consent');
+  gtag('consent', 'default', {
+    analytics_storage:  _consent === 'granted' ? 'granted' : 'denied',
+    ad_storage:         _consent === 'granted' ? 'granted' : 'denied',
+    ad_user_data:       _consent === 'granted' ? 'granted' : 'denied',
+    ad_personalization: _consent === 'granted' ? 'granted' : 'denied',
+    wait_for_update: 500
+  });
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-788486516"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'AW-788486516');
+  gtag('config', 'G-GB5D3J8ZTQ');
+</script>
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -731,7 +751,10 @@
       '━━━━━━━━━━━━━━━━━━\n' +
       `🕐 ${now}`;
 
-    if (typeof gtag !== 'undefined') gtag('event', 'generate_lead', { destination: answers[3], suite: answers[4] });
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'generate_lead', { destination: answers[3], suite: answers[4] });
+      gtag('event', 'manual_event_SUBMIT_LEAD_FORM', { send_to: 'AW-788486516' });
+    }
     if (typeof fbq  !== 'undefined') fbq('track', 'Lead');
 
     sendTelegram(text)
@@ -744,5 +767,32 @@
   }
 </script>
 
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(10,16,30,0.97);backdrop-filter:blur(10px);border-top:1px solid rgba(196,160,85,0.3);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+  <p style="margin:0;color:#e8e0d0;font-size:13px;line-height:1.5;flex:1;min-width:220px;">
+    Ми використовуємо cookies для аналітики та реклами. Ви можете прийняти або відхилити їх використання.
+    <a href="https://policies.google.com/privacy" target="_blank" style="color:#c4a055;text-decoration:underline;">Детальніше</a>
+  </p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="setConsent('denied')" style="background:transparent;border:1px solid rgba(196,160,85,0.4);color:#c4a055;padding:8px 18px;border-radius:4px;font-size:13px;cursor:pointer;">Відхилити</button>
+    <button onclick="setConsent('granted')" style="background:#c4a055;border:none;color:#0a101e;padding:8px 18px;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;">Прийняти</button>
+  </div>
+</div>
+<script>
+  (function() {
+    var consent = localStorage.getItem('cookie_consent');
+    if (!consent) document.getElementById('cookie-banner').style.display = 'flex';
+  })();
+  function setConsent(val) {
+    localStorage.setItem('cookie_consent', val);
+    gtag('consent', 'update', {
+      analytics_storage:  val,
+      ad_storage:         val,
+      ad_user_data:       val,
+      ad_personalization: val
+    });
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+</script>
 </body>
 </html>

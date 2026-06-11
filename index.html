@@ -6,6 +6,28 @@
   <title>The Blue Ocean - Explora Journeys</title>
   <meta name="description" content="Круїзи Explora Journeys: Середземне море, Кариби, Атлантика та інші маршрути. Люксові сьюти, 9 авторських ресторанів, all-inclusive. Приватний підбір для українських гостей.">
 
+  <!-- Google Consent Mode v2 defaults -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    var _consent = localStorage.getItem('cookie_consent');
+    gtag('consent', 'default', {
+      analytics_storage:    _consent === 'granted' ? 'granted' : 'denied',
+      ad_storage:           _consent === 'granted' ? 'granted' : 'denied',
+      ad_user_data:         _consent === 'granted' ? 'granted' : 'denied',
+      ad_personalization:   _consent === 'granted' ? 'granted' : 'denied',
+      wait_for_update: 500
+    });
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-788486516"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'AW-788486516');
+    gtag('config', 'G-GB5D3J8ZTQ');
+  </script>
+
   <!-- Canonical & hreflang -->
   <link rel="canonical" href="https://theblueoceancruises.com/">
   <link rel="alternate" hreflang="uk" href="https://theblueoceancruises.com/">
@@ -96,7 +118,7 @@
             {
               "@type": "Offer",
               "itemOffered": {
-                "@type": "Product",
+                "@type": "Service",
                 "name": "Ocean Terrace Suite",
                 "description": "Private ocean terrace with panoramic sea views, floor-to-ceiling windows, king bed and marble bathroom."
               }
@@ -104,7 +126,7 @@
             {
               "@type": "Offer",
               "itemOffered": {
-                "@type": "Product",
+                "@type": "Service",
                 "name": "Penthouse Suite",
                 "description": "Spacious luxury penthouse suite with panoramic ocean views, separate living area and butler service."
               }
@@ -112,7 +134,7 @@
             {
               "@type": "Offer",
               "itemOffered": {
-                "@type": "Product",
+                "@type": "Service",
                 "name": "Residence Suite",
                 "description": "Premium multi-room residence suite with wraparound terrace and premium amenities for longer voyages."
               }
@@ -120,7 +142,7 @@
             {
               "@type": "Offer",
               "itemOffered": {
-                "@type": "Product",
+                "@type": "Service",
                 "name": "Owner's Residence",
                 "description": "The most prestigious suite onboard — private terrace, separate living and dining areas, personal concierge."
               }
@@ -2325,6 +2347,34 @@
     const siblings = Array.from(el.parentElement.children).filter(c => c.classList.contains('reveal'));
     if (siblings.length > 1) el.style.transitionDelay = siblings.indexOf(el) * 0.12 + 's';
   });
+</script>
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(10,16,30,0.97);backdrop-filter:blur(10px);border-top:1px solid rgba(196,160,85,0.3);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+  <p style="margin:0;color:#e8e0d0;font-size:13px;line-height:1.5;flex:1;min-width:220px;">
+    Ми використовуємо cookies для аналітики та реклами. Ви можете прийняти або відхилити їх використання.
+    <a href="https://policies.google.com/privacy" target="_blank" style="color:#c4a055;text-decoration:underline;">Детальніше</a>
+  </p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="setConsent('denied')" style="background:transparent;border:1px solid rgba(196,160,85,0.4);color:#c4a055;padding:8px 18px;border-radius:4px;font-size:13px;cursor:pointer;">Відхилити</button>
+    <button onclick="setConsent('granted')" style="background:#c4a055;border:none;color:#0a101e;padding:8px 18px;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;">Прийняти</button>
+  </div>
+</div>
+<script>
+  (function() {
+    var consent = localStorage.getItem('cookie_consent');
+    if (!consent) document.getElementById('cookie-banner').style.display = 'flex';
+  })();
+  function setConsent(val) {
+    localStorage.setItem('cookie_consent', val);
+    gtag('consent', 'update', {
+      analytics_storage:  val,
+      ad_storage:         val,
+      ad_user_data:       val,
+      ad_personalization: val
+    });
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
 </script>
 </body>
 </html>
